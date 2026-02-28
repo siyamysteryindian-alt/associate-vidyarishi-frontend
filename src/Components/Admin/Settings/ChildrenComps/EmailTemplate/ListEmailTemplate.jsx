@@ -1,0 +1,163 @@
+import React, { useEffect, useState } from "react";
+import { AiTwotoneEdit } from "react-icons/ai";
+import { IoChevronBack, IoChevronForwardOutline } from "react-icons/io5";
+import { MdDelete } from "react-icons/md";
+import UpdateEmailTemplate from "./UpdateEmailTemplate";
+
+const ListEmailTemplate = ({
+  EmailTemplateListData,
+  EmailTemplateLoading,
+  FetchEmailTemplate,
+}) => {
+  const [UpdateEmailTemplateButton, setUpdateEmailTemplateButton] =
+    useState(false);
+  const [EmailData, SetEmailData] = useState({});
+  const HandleOpenUpdateEmailTemplate = (data) => {
+    setUpdateEmailTemplateButton(true);
+    SetEmailData(data);
+  };
+  const HandleCloseUpdateEmailTemplate = () => {
+    setUpdateEmailTemplateButton(false);
+  };
+
+  return (
+    <>
+      <div className="py-2.5 px-4">
+        <div className="h-auto w-auto">
+          {/* <!-- Table --> */}
+          <table className=" min-w-full max-w-screen-xl  overflow-x-scroll text-base text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead className="text-sm sticky top-0 text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr className="p-2 mt-1">
+                <th scope="col" className="px-4 py-2">
+                  <div className="w-full max-w-lg">
+                    <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+                      Template Name
+                    </h1>
+                  </div>
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  <div className="w-full max-w-lg">
+                    <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+                      Subject Name
+                    </h1>
+                  </div>
+                </th>
+
+                <th scope="col" className="px-4 py-2">
+                  <div className="w-full max-w-lg">
+                    <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+                      Action
+                    </h1>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {EmailTemplateListData?.length > 0 ? (
+                EmailTemplateListData?.map((Emaildata) => (
+                  <tr
+                    className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b
+                     dark:border-gray-700"
+                  >
+                    <th
+                      scope="row"
+                      className="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      {Emaildata?.name}
+                    </th>
+                    <td className="px-4 py-2">
+                      <div className="w-full max-w-lg">
+                        <h1 className="whitespace-nowrap overflow-hidden text-ellipsis">
+                          {Emaildata?.subject}
+                        </h1>
+                      </div>{" "}
+                    </td>
+                    <td className="px-4 py-2 flex gap-2">
+                      <button
+                        onClick={() => HandleOpenUpdateEmailTemplate(Emaildata)}
+                        className="text-base text-green-600 dark:text-green-500 hover:underline"
+                      >
+                        <AiTwotoneEdit size={20} />
+                      </button>
+                      <button className="text-base text-red-600 dark:text-red-500 hover:underline">
+                        <MdDelete size={20} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <>
+                  <div className=" mt-10 ml-10">Email Templates Not Found</div>
+                </>
+              )}
+              {/* <div className=" text-xl text-black text-center font-bold">
+                We Are Working On It
+              </div> */}
+            </tbody>
+          </table>
+
+          {/* <!-- Pagination -->/ */}
+          {/* <nav
+            className="flex text-base flex-col md:flex-row justify-between items-start md:items-center space-y-3 
+            md:space-y-0 px-4 py-3"
+            aria-label="Table navigation"
+          >
+            <span className=" text-gray-500 dark:text-gray-400 flex gap-1 flex-row">
+              Showing
+              <span className="font-semibold text-gray-900 dark:text-white">
+                1-10
+              </span>
+              of
+              <span className="font-semibold text-gray-900 dark:text-white">
+                1000
+              </span>
+            </span>
+            <ul className="inline-flex items-stretch -space-x-px">
+              <li>
+                <button
+                  className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 
+                bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 
+                dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700
+                 dark:hover:text-white"
+                >
+                  <IoChevronBack />
+                </button>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center justify-center py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  1
+                </a>
+              </li>
+              <li>
+                <button
+                  className="flex items-center justify-center h-full py-1.5 px-3 
+                leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 
+                hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 
+                dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <IoChevronForwardOutline />
+                </button>
+              </li>
+            </ul>
+          </nav> */}
+        </div>
+      </div>
+
+      {UpdateEmailTemplateButton && (
+        <>
+          <span>
+            <UpdateEmailTemplate
+              HandleCloseUpdateEmailTemplate={HandleCloseUpdateEmailTemplate}
+              SelectedEmailData={EmailData}
+            />
+          </span>
+        </>
+      )}
+    </>
+  );
+};
+
+export default ListEmailTemplate;

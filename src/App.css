@@ -1,0 +1,212 @@
+/* globals.css or styles/globals.css */
+
+* {
+  font-family: "Sora", sans-serif;
+  letter-spacing: 0.25px;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root {
+  --color-brand: #222222;
+  --color-purple: #a28ef9; /* accent */
+  --color-mint: #a4f5a6; /* green note */
+  --color-bg: #e9efe9; /* page background similar to screenshot */
+  --color-surface: #ffffff;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --soft-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
+  --muted: #9aa3a0;
+
+  --brand-ink: #222222; /* dark */
+  --accent-purple: #a28ef9; /* purple card */
+  --accent-mint: #a4f5a6; /* mint/green card */
+  --surface: #ffffff; /* white cards */
+  --bg: #e9efe9; /* soft pale background from screenshot */
+  --muted: #889096;
+  --soft-shadow: 0 10px 30px rgba(16, 24, 40, 0.06);
+  --soft-shadow-2: 0 6px 18px rgba(16, 24, 40, 0.05);
+  --card-radius: 18px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial;
+  background: var(--color-bg);
+  color: var(--color-brand);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* card base */
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--soft-shadow);
+  padding: 20px;
+}
+
+/* note colored card shapes */
+.note {
+  border-radius: 16px;
+  padding: 18px;
+  color: #0b0b0b;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* small rounded avatar bubble in list */
+.avatar-bubble {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.12)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.ScrollBarStyle::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ScrollBarStyle::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.ScrollBarStyle::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 10px;
+}
+
+.ScrollBarStyle::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.ScrollBarStyle::-webkit-scrollbar-button {
+  display: none;
+}
+
+.ScrollBarStyle::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
+
+.ScrollBarStyle2::-webkit-scrollbar {
+  width: 0px;
+}
+
+
+/* old ui at the bottom */
+
+/* 
+a.home.active {
+  background-color: #cbd5e1;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+a.sidehome.active {
+  background-color: rgb(70, 219, 95);
+  font-weight: 500;
+  font-size: 16px;
+}
+
+a.AcademicHome.active {
+  background-color: #bac0ca;
+}
+
+
+
+.ScrollBarStyle2::-webkit-scrollbar {
+  width: 0px;
+}
+
+
+.custom-cancel-button {
+  background-color: rgb(199, 45, 45);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+.custom-confirm-button {
+  background-color: red; 
+  color: white; 
+  border: none; 
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold; 
+  cursor: pointer; 
+}
+
+.custom-confirm2-button {
+  background-color: rgb(45, 189, 45);
+  color: white; 
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px; 
+  font-weight: bold;
+  cursor: pointer; 
+}
+
+.fadeInUp {
+  animation-delay: 2s;
+  animation: fadeInUp 1s ease backwards;
+}
+@keyframes fadeInUp {
+  0% {
+    transform: translate(0px, -150px);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0px, 0px);
+    opacity: 1;
+  }
+}
+
+body {
+  overflow: hidden;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+} */

@@ -6,10 +6,13 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import EmailTemplate from "./EmailTemplate";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const UpdateEmailTemplate = ({
   SelectedEmailData,
   HandleCloseUpdateEmailTemplate,
+  FetchEmailTemplate,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
@@ -50,9 +53,10 @@ const UpdateEmailTemplate = ({
   const HandleSubmitEmailData = async (e) => {
     e.preventDefault();
     try {
-      const Response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/CreateEmailTemplate`,
+      const Response = await axios.patch(
+        `${import.meta.env.VITE_BACKEND_URL}/UpdateEmailTemplate`,
         {
+          emailId: SelectedEmailData?._id,
           name: EmailData?.EmailName,
           subject: EmailData?.Subject,
           content: selectedItems,
@@ -60,25 +64,37 @@ const UpdateEmailTemplate = ({
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (Response?.data?.success) {
         toast.success(Response?.data?.message);
-        // FetchNotice();
-        HandleCloseCreateEmailTemplate();
+        FetchEmailTemplate(); // refresh list
+        HandleCloseUpdateEmailTemplate();
       } else {
         toast.error(Response?.data?.message);
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     }
   };
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  useEffect(() => {
+    if (SelectedEmailData) {
+      setSelectedItems(SelectedEmailData?.content || []);
+      setValue(SelectedEmailData?.messageContent || "");
 
+      setEmailData({
+        EmailName: SelectedEmailData?.name || "",
+        Subject: SelectedEmailData?.subject || "",
+      });
+    }
+  }, [SelectedEmailData]);
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
+  const filteredOptions = options;
   return (
     <>
       <div className=" absolute z-30 top-0 bottom-0 left-0 right-0 bg-gray-700 bg-opacity-80 ">
@@ -86,7 +102,7 @@ const UpdateEmailTemplate = ({
           <div className="bg-white dark:bg-slate-900 dark:text-white rounded-xl h-[80vh] w-[90vh] overflow-y-scroll ScrollBarStyle2 ">
             <div className=" flex justify-between items-center flex-row p-4 border-b-2 border-b-slate-400">
               <div className="text-base font-semibold">
-                Create Email Template
+                Update Email Template
               </div>
               <button onClick={HandleCloseUpdateEmailTemplate}>
                 <IoClose

@@ -196,7 +196,7 @@ const Documents = () => {
               {/* ABC ID */}
               <div>
                 <label htmlFor="ABCID" className={fileLabelClass}>
-                  ABC ID
+                  ABC ID <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="ABCID"
@@ -204,6 +204,7 @@ const Documents = () => {
                   type="file"
                   onChange={HandleUploadPhoto}
                   className={fileInputClass}
+                  required
                 />
                 {renderPreview(AllDocuments?.ABCID)}
               </div>
@@ -211,7 +212,7 @@ const Documents = () => {
               {/* DEB ID */}
               <div>
                 <label htmlFor="DEBID" className={fileLabelClass}>
-                  DEB ID
+                  DEB ID <span className="text-red-500">*</span>
                 </label>
                 <input
                   id="DEBID"
@@ -219,6 +220,7 @@ const Documents = () => {
                   type="file"
                   onChange={HandleUploadPhoto}
                   className={fileInputClass}
+                  required
                 />
                 {renderPreview(AllDocuments?.DEBID)}
               </div>

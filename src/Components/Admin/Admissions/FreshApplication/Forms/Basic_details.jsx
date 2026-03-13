@@ -135,7 +135,7 @@ const Basic_details = () => {
 
                       return data?.allotedUniversities?.some(
                         (university) =>
-                          university?._id === UniversityGetDataFromRedux?.id
+                          university?._id === UniversityGetDataFromRedux?.id,
                       );
                     }).map((center) => {
                       if (ReduxGetDataFromRedux?.role === "Counsellor") {
@@ -143,8 +143,8 @@ const Basic_details = () => {
                           (couns) =>
                             couns?._id === ReduxGetDataFromRedux?.id &&
                             couns?.allotedCenter?.some(
-                              (centerData) => centerData?._id === center?._id
-                            )
+                              (centerData) => centerData?._id === center?._id,
+                            ),
                         );
 
                         if (counsellor) {
@@ -164,8 +164,8 @@ const Basic_details = () => {
                           (subcouns) =>
                             subcouns?._id === ReduxGetDataFromRedux?.id &&
                             subcouns?.allotedCenter?.some(
-                              (centerData) => centerData?._id === center?._id
-                            )
+                              (centerData) => centerData?._id === center?._id,
+                            ),
                         );
 
                         if (subcounsellor) {
@@ -177,7 +177,7 @@ const Basic_details = () => {
                               >
                                 {centerData?.name}
                               </option>
-                            )
+                            ),
                           );
                         }
                       } else if (ReduxGetDataFromRedux?.role === "subCenter") {
@@ -191,7 +191,7 @@ const Basic_details = () => {
                               >
                                 {data?.center?.name}
                               </option>
-                            )
+                            ),
                         );
                       } else {
                         return (
@@ -232,7 +232,7 @@ const Basic_details = () => {
                     <option key={data?._id} value={data?._id}>
                       {data?.name}
                     </option>
-                  ) : null
+                  ) : null,
                 )}
               </select>
               {UserData?.AdmissionSession === "" && (
@@ -258,7 +258,7 @@ const Basic_details = () => {
                     <option key={data?._id} value={data?._id}>
                       {data?.name}
                     </option>
-                  )
+                  ),
                 )}
               </select>
               {UserData?.AdmissionType === "" && (
@@ -286,7 +286,7 @@ const Basic_details = () => {
                   AllProgramsByPagination?.filter(
                     (data) =>
                       data?.university?._id === UniversityGetDataFromRedux.id &&
-                      !data?.isDeleted
+                      !data?.isDeleted,
                   )?.map((data) => (
                     <option key={data?._id} value={data?._id}>
                       {data?.name}
@@ -318,7 +318,7 @@ const Basic_details = () => {
                   (data) =>
                     data?.university?._id === UniversityGetDataFromRedux?.id &&
                     data?.Program?._id === UserData?.Course &&
-                    !data?.isDeleted
+                    !data?.isDeleted,
                 ).map((data) => (
                   <option key={data?._id} value={data?._id}>
                     {data?.name}
@@ -610,9 +610,10 @@ const Basic_details = () => {
           {/* ABC / DEB IDs */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             {/* ABC ID */}
+            {/* ABC ID */}
             <div className={fieldWrapperClass}>
               <label htmlFor="ABCIDNo" className={labelClass}>
-                ABC ID
+                ABC ID <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -622,13 +623,19 @@ const Basic_details = () => {
                 className={inputBaseClass}
                 id="ABCIDNo"
                 placeholder="Enter ABC ID"
+                required
               />
+
+              {UserData?.ABCIDNo === "" && (
+                <p className={errorTextClass}>This field is required</p>
+              )}
             </div>
 
             {/* DEB ID */}
+            {/* DEB ID */}
             <div className={fieldWrapperClass}>
               <label htmlFor="DEBIDNo" className={labelClass}>
-                DEB ID
+                DEB ID <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -638,7 +645,12 @@ const Basic_details = () => {
                 className={inputBaseClass}
                 id="DEBIDNo"
                 placeholder="Enter DEB ID"
+                required
               />
+
+              {UserData?.DEBIDNo === "" && (
+                <p className={errorTextClass}>This field is required</p>
+              )}
             </div>
 
             <div className="hidden md:block" />

@@ -41,7 +41,9 @@ const StepperControl = ({
       !UserData?.Nationality ||
       !UserData?.Religion ||
       !UserData?.year ||
-      !UserData?.SubCourse
+      !UserData?.SubCourse ||
+      !UserData?.ABCIDNo ||
+      !UserData?.DEBIDNo
     ) {
       setUserDataValidations(true);
     } else {
@@ -132,7 +134,7 @@ const StepperControl = ({
         const data = academicData[trimmedEligibility];
 
         return requiredFields ? !checkFields(data, requiredFields) : true;
-      }
+      },
     );
 
     setAcademicsDataValidations(!isValid);
@@ -154,7 +156,9 @@ const StepperControl = ({
     if (
       !AllDocuments?.StudentSignature ||
       !AllDocuments?.aadhaar ||
-      !AllDocuments?.photo
+      !AllDocuments?.photo ||
+    !AllDocuments?.ABCID ||
+    !AllDocuments?.DEBID
     ) {
       setAllDocumentsDataValidations(true);
     } else {
@@ -164,10 +168,10 @@ const StepperControl = ({
 
   // Function to determine when to disable the button
   const isNextButtonDisabled = () => {
-    // if (currentStep === 1 && UserDataValidations) return true;
-    // if (currentStep === 2 && PersonalDataValidations) return true;
-    // if (currentStep === 3 && AcademicsDataValidations) return true;
-    // if (currentStep === 4 && AllDocumentsDataValidations) return true;
+    if (currentStep === 1 && UserDataValidations) return true;
+    if (currentStep === 2 && PersonalDataValidations) return true;
+    if (currentStep === 3 && AcademicsDataValidations) return true;
+    if (currentStep === 4 && AllDocumentsDataValidations) return true;
 
     return false;
   };

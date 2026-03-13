@@ -35,17 +35,12 @@ const ListOfAdmissionsession = ({
   };
 
   // status permission
-  const HandleUpdateStatusToggleAdmissionsession = async (
-    AdmissionsessionId,
-    BooleanValue
-  ) => {
+  const HandleToggle = async (id, field, value) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/AdmissionsessionisAvailableToggle`,
-        { AdmissionsessionId, BooleanValue },
-        {
-          withCredentials: true,
-        }
+        `${import.meta.env.VITE_BACKEND_URL}/AdmissionSessionToggle`,
+        { id, field, value },
+        { withCredentials: true },
       );
 
       if (response?.data?.success) {
@@ -55,9 +50,7 @@ const ListOfAdmissionsession = ({
         toast.error(response?.data?.message);
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
-      );
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -90,7 +83,7 @@ const ListOfAdmissionsession = ({
 
   const HandleDeleteAdmissionSessionAPI = async (
     AdmissionSessionId,
-    BooleanValue
+    BooleanValue,
   ) => {
     try {
       const response = await axios.patch(
@@ -98,7 +91,7 @@ const ListOfAdmissionsession = ({
         { AdmissionSessionId, BooleanValue },
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (response?.data?.success) {
@@ -116,7 +109,7 @@ const ListOfAdmissionsession = ({
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     }
   };
@@ -217,10 +210,10 @@ const ListOfAdmissionsession = ({
                           <div className="w-[15vh] flex gap-y-1 flex-row">
                             <ToggleButton
                               ClickYes={() =>
-                                HandleAdmissionSessiontatusToggleYes(data)
+                                HandleToggle(data._id, "isAvailable", true)
                               }
                               ClickNo={() =>
-                                HandleAdmissionSessionStatusToggleNo(data)
+                                HandleToggle(data._id, "isAvailable", false)
                               }
                               StateUpdate={data?.isAvailable}
                             />
@@ -230,18 +223,26 @@ const ListOfAdmissionsession = ({
                         <td className="px-4 py-2">
                           <div className="w-[15vh] flex gap-y-1 flex-row">
                             <ToggleButton
-                              // ClickYes={() => HandleLoginStatusToggleYes(data)}
-                              // ClickNo={() => HandleLoginStatusToggleNo(data)}
-                              StateUpdate={data?.isCureent}
+                              ClickYes={() =>
+                                HandleToggle(data._id, "isCurrent", true)
+                              }
+                              ClickNo={() =>
+                                HandleToggle(data._id, "isCurrent", false)
+                              }
+                              StateUpdate={data?.isCurrent}
                             />
-                            {data?.isCureent ? "Yes" : "No"}
+                            {data?.isCurrent ? "Yes" : "No"}
                           </div>
                         </td>
                         <td className="px-4 py-2">
                           <div className="w-[15vh] flex gap-y-1 flex-row">
                             <ToggleButton
-                              // ClickYes={() => HandleLoginStatusToggleYes(data)}
-                              // ClickNo={() => HandleLoginStatusToggleNo(data)}
+                              ClickYes={() =>
+                                HandleToggle(data._id, "isLEStatus", true)
+                              }
+                              ClickNo={() =>
+                                HandleToggle(data._id, "isLEStatus", false)
+                              }
                               StateUpdate={data?.isLEStatus}
                             />
                             {data?.isLEStatus ? "Yes" : "No"}
@@ -250,8 +251,12 @@ const ListOfAdmissionsession = ({
                         <td className="px-4 py-2">
                           <div className="w-[15vh] flex gap-y-1 flex-row">
                             <ToggleButton
-                              // ClickYes={() => HandleLoginStatusToggleYes(data)}
-                              // ClickNo={() => HandleLoginStatusToggleNo(data)}
+                              ClickYes={() =>
+                                HandleToggle(data._id, "isCTStatus", true)
+                              }
+                              ClickNo={() =>
+                                HandleToggle(data._id, "isCTStatus", false)
+                              }
                               StateUpdate={data?.isCTStatus}
                             />
                             {data?.isCTStatus ? "Yes" : "No"}
@@ -281,7 +286,7 @@ const ListOfAdmissionsession = ({
                           Not Created ANY Data Inside This University
                         </div>
                       </div>
-                    )
+                    ),
                   )}
                 </>
               ) : UniversityGetDataFromRedux?.id === "" ? (

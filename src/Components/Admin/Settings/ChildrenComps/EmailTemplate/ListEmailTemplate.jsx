@@ -3,6 +3,7 @@ import { AiTwotoneEdit } from "react-icons/ai";
 import { IoChevronBack, IoChevronForwardOutline } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import UpdateEmailTemplate from "./UpdateEmailTemplate";
+import DeleteEmailTemplate from "./DeleteEmailTemplate";
 
 const ListEmailTemplate = ({
   EmailTemplateListData,
@@ -18,6 +19,19 @@ const ListEmailTemplate = ({
   };
   const HandleCloseUpdateEmailTemplate = () => {
     setUpdateEmailTemplateButton(false);
+  };
+
+  const [DeleteEmailTemplateButton, setDeleteEmailTemplateButton] =
+    useState(false);
+  const [SelectedEmailData, setSelectedEmailData] = useState({});
+
+  const HandleOpenDeleteEmailTemplate = (data) => {
+    setDeleteEmailTemplateButton(true);
+    setSelectedEmailData(data);
+  };
+
+  const HandleCloseDeleteEmailTemplate = () => {
+    setDeleteEmailTemplateButton(false);
   };
 
   return (
@@ -54,10 +68,16 @@ const ListEmailTemplate = ({
             </thead>
             <tbody>
               {EmailTemplateListData?.length > 0 ? (
+                // EmailTemplateListData?.map((Emaildata) => (
+                //   <tr
+                //     className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b
+                //      dark:border-gray-700"
+                //   >
                 EmailTemplateListData?.map((Emaildata) => (
                   <tr
+                    key={Emaildata?._id}
                     className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b
-                     dark:border-gray-700"
+    dark:border-gray-700"
                   >
                     <th
                       scope="row"
@@ -79,7 +99,10 @@ const ListEmailTemplate = ({
                       >
                         <AiTwotoneEdit size={20} />
                       </button>
-                      <button className="text-base text-red-600 dark:text-red-500 hover:underline">
+                      <button
+                        onClick={() => HandleOpenDeleteEmailTemplate(Emaildata)}
+                        className="text-base text-red-600 dark:text-red-500 hover:underline"
+                      >
                         <MdDelete size={20} />
                       </button>
                     </td>
@@ -152,9 +175,18 @@ const ListEmailTemplate = ({
             <UpdateEmailTemplate
               HandleCloseUpdateEmailTemplate={HandleCloseUpdateEmailTemplate}
               SelectedEmailData={EmailData}
+              FetchEmailTemplate={FetchEmailTemplate}
             />
           </span>
         </>
+      )}
+
+      {DeleteEmailTemplateButton && (
+        <DeleteEmailTemplate
+          SelectedEmailData={SelectedEmailData}
+          HandleCloseDeleteEmailTemplate={HandleCloseDeleteEmailTemplate}
+          FetchEmailTemplate={FetchEmailTemplate}
+        />
       )}
     </>
   );

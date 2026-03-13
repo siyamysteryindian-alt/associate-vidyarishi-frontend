@@ -135,14 +135,14 @@ const AllApplications = ({
     if (StatusDetails?.MarkAsByCenter && CompleteStudentData?._id) {
       UpdateProcessedByCenter(
         StatusDetails.MarkAsByCenter,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
     }
 
     if (StatusDetails?.MarkAsByUniversity && CompleteStudentData?._id) {
       UpdateProcessedByUniversity(
         StatusDetails.MarkAsByUniversity,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
     }
 
@@ -185,7 +185,7 @@ const AllApplications = ({
             },
             {
               withCredentials: true,
-            }
+            },
           );
 
           if (response?.data?.success) {
@@ -194,7 +194,7 @@ const AllApplications = ({
                 if (result?.isConfirmed) {
                   setRefreshApplications(true);
                 }
-              }
+              },
             );
           } else {
             toast.error(response?.data?.message || "Failed to Process.");
@@ -202,7 +202,7 @@ const AllApplications = ({
         } catch (error) {
           toast.error(
             error.response?.data?.message ||
-              "An error occurred. Please try again."
+              "An error occurred. Please try again.",
           );
         }
       } else {
@@ -240,7 +240,7 @@ const AllApplications = ({
             },
             {
               withCredentials: true,
-            }
+            },
           );
 
           if (response?.data?.success) {
@@ -249,19 +249,19 @@ const AllApplications = ({
                 if (result?.isConfirmed) {
                   setRefreshApplications(true);
                 }
-              }
+              },
             );
           } else {
             Swal.fire(
               `${response?.data?.message || "Failed to Process University!"}`,
               "",
-              "success"
+              "success",
             );
           }
         } catch (error) {
           toast.error(
             error.response?.data?.message ||
-              "An error occurred. Please try again."
+              "An error occurred. Please try again.",
           );
         }
       } else {
@@ -296,7 +296,7 @@ const AllApplications = ({
             },
             {
               withCredentials: true,
-            }
+            },
           );
 
           if (response?.data?.success) {
@@ -305,19 +305,19 @@ const AllApplications = ({
                 if (result?.isConfirmed) {
                   setRefreshApplications(true);
                 }
-              }
+              },
             );
           } else {
             Swal.fire(
               `${response?.data?.message || "Failed to Process University!"}`,
               "",
-              "success"
+              "success",
             );
           }
         } catch (error) {
           toast.error(
             error.response?.data?.message ||
-              "An error occurred. Please try again."
+              "An error occurred. Please try again.",
           );
         }
       } else {
@@ -400,7 +400,7 @@ const AllApplications = ({
         { StudentId, BooleanValue },
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (response?.data?.success) {
@@ -418,7 +418,7 @@ const AllApplications = ({
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     }
   };
@@ -492,7 +492,29 @@ const AllApplications = ({
                 {/* Actions */}
                 <td className="px-4 py-2 align-top">
                   <div className="w-[15vh] flex gap-2 flex-row">
-                    <button
+                    {ReduxUser?.role !== "Accountant" && (
+                      <button
+                        onClick={() => {
+                          const url = `/${
+                            ReduxUser?.role === "Admin"
+                              ? "admin"
+                              : ReduxUser?.role === "center"
+                                ? "center"
+                                : ReduxUser?.role === "operation-manager"
+                                  ? "operational"
+                                  : ReduxUser?.role === "Counsellor"
+                                    ? "counsellor"
+                                    : ""
+                          }/update-student/${StudentData?._id}`;
+                          window.open(url, "_blank");
+                        }}
+                        title="Edit Student"
+                        className="text-green-600 hover:text-green-700"
+                      >
+                        <AiTwotoneEdit size={18} />
+                      </button>
+                    )}
+                    {/* <button
                       onClick={() => {
                         const url = `/${
                           ReduxUser?.role === "Admin"
@@ -511,12 +533,12 @@ const AllApplications = ({
                       className="text-green-600 hover:text-green-700"
                     >
                       <AiTwotoneEdit size={18} />
-                    </button>
+                    </button> */}
 
                     {(ReduxUser?.role == "Admin" ||
                       ReduxUser?.role == "operation-manager" ||
                       ReduxUser?.role == "university-manager" ||
-                      ReduxUser?.role == "Accountant" ||
+                      // ReduxUser?.role == "Accountant" ||
                       ReduxUser?.role == "Counsellor" ||
                       ReduxUser?.role == "subCounsellor") && (
                       <button
@@ -611,7 +633,7 @@ const AllApplications = ({
                               <>
                                 Completed (
                                 {ExtractDateFromDb(
-                                  StudentData?.status?.submitedFormDate
+                                  StudentData?.status?.submitedFormDate,
                                 )}
                                 )
                               </>
@@ -684,7 +706,7 @@ const AllApplications = ({
                             {" "}
                             (
                             {ExtractDateFromDb(
-                              StudentData?.status?.processedbyCenteron
+                              StudentData?.status?.processedbyCenteron,
                             )}
                             )
                           </span>
@@ -826,7 +848,7 @@ const AllApplications = ({
                                 {" "}
                                 Verified On (
                                 {ExtractDateFromDb(
-                                  StudentData?.documents?.isApprovedDate
+                                  StudentData?.documents?.isApprovedDate,
                                 )}
                                 )
                               </span>
@@ -845,7 +867,7 @@ const AllApplications = ({
                               {" "}
                               (
                               {ExtractDateFromDb(
-                                StudentData?.status?.processedtoUniversityon
+                                StudentData?.status?.processedtoUniversityon,
                               )}
                               )
                             </span>
@@ -904,7 +926,7 @@ const AllApplications = ({
                           <span className="text-rose-600 font-bold">
                             {" "}
                             {ExtractDateFromDb(
-                              StudentData?.status?.admissionCancelDate
+                              StudentData?.status?.admissionCancelDate,
                             )}
                           </span>
                         </div>
@@ -1154,7 +1176,7 @@ const AllApplications = ({
             {AllStudentListData?.some(
               (data) =>
                 data.university?._id === !UniversityGetDataFromRedux?.id &&
-                !data?.isDeleted
+                !data?.isDeleted,
             ) && (
               <tr>
                 <td colSpan={20}>
@@ -1170,7 +1192,7 @@ const AllApplications = ({
               (data) =>
                 !data?.isDeleted &&
                 data?.university?._id === "" &&
-                UniversityGetDataFromRedux?.id === ""
+                UniversityGetDataFromRedux?.id === "",
             ) && (
               <tr>
                 <td colSpan={20}>

@@ -48,7 +48,6 @@ const CreateApiKeyModal = ({ universityId, onClose, onSaved }) => {
         apiUrl: form.apiUrl,
         apiKey: form.apiKey,
         isUniversityAPIkey: form.UniversityAPIkey,
-        universityId,
       };
 
       const res = await axios.post(

@@ -81,6 +81,36 @@ const AllApplications = ({
     setAssignCourierButton(false);
   };
 
+  const [viewCourierData, setViewCourierData] = useState(null);
+  const [viewCourierModal, setViewCourierModal] = useState(false);
+  const HandleViewCourier = (courier) => {
+    setViewCourierData(courier);
+    setViewCourierModal(true);
+  };
+
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [selectedCourierId, setSelectedCourierId] = useState(null);
+  const HandleMarkReceived = async (courierId) => {
+    try {
+      const confirm = window.confirm("Mark this courier as received?");
+
+      if (!confirm) return;
+
+      await axios.patch(
+        `${import.meta.env.VITE_BACKEND_URL}/mark-courier-received/${courierId}`,
+        {},
+        { withCredentials: true },
+      );
+
+      toast.success("Courier marked as received");
+
+      // refresh table
+      FetchAllStudentByPagination(AllStudentCurrentPage, AllStudentLimit);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update courier status");
+    }
+  };
   // Enrollment number Button Open
   const [EnrollmentNumberBooleanButton, setEnrollmentNumberBooleanButton] =
     useState(false);
@@ -1139,10 +1169,48 @@ const AllApplications = ({
                     }`}
                   >
                     {StudentData?.Courier
-                      ? StudentData?.Courier?.DropLocation
+                      ? StudentData?.Courier?.DocketNo
                       : "N/A"}
                   </div>
                 </td>
+                {(ReduxUser.role === "Admin" ||
+                  ReduxUser.role === "operation-manager" ||
+                  ReduxUser.role === "center") && (
+                  <td className="text-center">
+                    <div className="flex justify-center gap-2">
+                      {StudentData?.Courier && (
+                        <>
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                            onClick={() =>
+                              HandleViewCourier(StudentData?.Courier)
+                            }
+                          >
+                            View
+                          </button>
+
+                          {!StudentData?.Courier?.Received && (
+                            <button
+                              className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                              onClick={() => {
+                                setSelectedCourierId(StudentData?.Courier?._id);
+                                setConfirmModal(true);
+                              }}
+                            >
+                              Mark Received
+                            </button>
+                          )}
+
+                          {StudentData?.Courier?.Received && (
+                            <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                              Received
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </td>
+                )}
 
                 {(ReduxUser.role === "Admin" ||
                   ReduxUser.role === "operation-manager") && (
@@ -1256,6 +1324,105 @@ const AllApplications = ({
           HandleDownloadStudentDataclose={HandleDownloadStudentDataclose}
           DownloadApplnOnStudentId={DownloadApplnOnStudentId}
         />
+      )}
+
+      {viewCourierModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="bg-white rounded-lg shadow-lg w-[400px] p-5">
+            <h2 className="text-lg font-bold mb-4">Courier Details</h2>
+
+            <div className="text-sm space-y-2">
+              <p>
+                <strong>Courier Name:</strong>{" "}
+                {viewCourierData?.CourierName?.CourierName}
+              </p>
+
+              <p>
+                <strong>Docket No:</strong> {viewCourierData?.DocketNo}
+              </p>
+
+              <p>
+                <strong>Sent Date:</strong>{" "}
+                {viewCourierData?.DateTime
+                  ? new Date(viewCourierData.DateTime).toLocaleDateString()
+                  : "N/A"}
+              </p>
+
+              {viewCourierData?.LrSlip && (
+                <a
+                  href={viewCourierData.LrSlip}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  View LR Slip
+                </a>
+              )}
+              {/* {viewCourierData?.LrSlip && (
+                <div className="mt-3">
+                  <p className="font-semibold text-sm mb-1">LR Slip</p>
+                  <img
+                    src={viewCourierData.LrSlip}
+                    alt="LR Slip"
+                    className="w-full rounded border"
+                  />
+                </div>
+              )} */}
+              <p>
+                <strong>Status:</strong>{" "}
+                {viewCourierData?.Received ? (
+                  <span className="text-green-600 font-semibold">
+                    Received Courier
+                  </span>
+                ) : (
+                  <span className="text-yellow-600 font-semibold">
+                    Courier Sent
+                  </span>
+                )}
+              </p>
+            </div>
+
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => setViewCourierModal(false)}
+                className="px-3 py-1 bg-red-500 text-white rounded"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {confirmModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="bg-white rounded-lg shadow-lg w-[350px] p-5">
+            <h2 className="text-lg font-bold mb-3">Confirm Action</h2>
+
+            <p className="text-sm text-gray-600 mb-5">
+              Are you sure you want to mark this courier as received?
+            </p>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setConfirmModal(false)}
+                className="px-4 py-1.5 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={() => {
+                  HandleMarkReceived(selectedCourierId);
+                  setConfirmModal(false);
+                }}
+                className="px-4 py-1.5 bg-green-500 text-white rounded hover:bg-green-600"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

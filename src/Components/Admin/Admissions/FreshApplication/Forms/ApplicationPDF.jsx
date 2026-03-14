@@ -4,10 +4,11 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import Loader from "../../../../../Helper/Loader";
 import Loader2 from "../../../../../Helper/Loader2";
+import { useNavigate } from "react-router-dom";
 
 const ApplicationPDF = () => {
   const StudentIdByReduxStore = useSelector((state) => state?.studentId);
-
+  const navigate = useNavigate();
   const [loading, setLoading] = useState({
     preview: false,
     download: false,
@@ -36,7 +37,7 @@ const ApplicationPDF = () => {
         `${
           import.meta.env.VITE_BACKEND_URL
         }/GetStudentsByIdForGeneratingPdf/${studentId}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       // Backend agar sirf HTML bhej raha hai:
@@ -71,7 +72,7 @@ const ApplicationPDF = () => {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/GenerateReportPdfLib`,
         { studentid: studentId },
-        { responseType: "blob", withCredentials: true }
+        { responseType: "blob", withCredentials: true },
       );
 
       const blob = new Blob([response.data], { type: "application/pdf" });
@@ -94,7 +95,7 @@ const ApplicationPDF = () => {
       toast.error(
         err.response?.status === 400
           ? "Student form is incomplete."
-          : err.response?.data?.message || "An error occurred."
+          : err.response?.data?.message || "An error occurred.",
       );
     } finally {
       setLoading((prev) => ({ ...prev, [action]: false }));
@@ -115,6 +116,21 @@ const ApplicationPDF = () => {
     if (typeof studentData === "string") return studentData;
     if (studentData?.html) return studentData.html;
     return "";
+  };
+
+  const user = useSelector((state) => state?.user);
+
+  const handleBackToDashboard = () => {
+    const role = user?.role;
+
+    const roleDashboard = {
+      Admin: "/admin/dashboard",
+      center: "/center/dashboard",
+      Counsellor: "/counsellor/dashboard",
+      Accountant: "/accountant/dashboard",
+    };
+
+    navigate(roleDashboard[role] || "/dashboard");
   };
 
   const studentId = StudentIdByReduxStore?.id;
@@ -169,7 +185,8 @@ const ApplicationPDF = () => {
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-3 mt-4 px-1">
+      {/* <div className="flex flex-col sm:flex-row justify-center sm:justify-end items-center gap-3 mt-4 px-1"> */}
+      <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-4 px-1">
         <button
           onClick={() => handlePdfAction(studentId, "print")}
           disabled={actionsDisabled}
@@ -190,6 +207,13 @@ const ApplicationPDF = () => {
             disabled:opacity-60 disabled:cursor-not-allowed`}
         >
           {loading.download ? <Loader2 /> : <span>Download PDF</span>}
+        </button>
+        <button
+          type="button"
+          onClick={handleBackToDashboard}
+          className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-[11px] md:text-xs font-medium text-slate-600 dark:text-slate-200 px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"
+        >
+          Back to dashboard
         </button>
       </div>
 

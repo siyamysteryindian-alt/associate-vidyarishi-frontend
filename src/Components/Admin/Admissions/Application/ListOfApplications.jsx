@@ -197,7 +197,7 @@ const ListOfApplications = ({
   const matchingStudentsCount = AllStudentListData?.filter(
     (data) =>
       data?.university?._id === UniversityGetDataFromRedux?.id &&
-      !data?.isDeleted
+      !data?.isDeleted,
   ).length;
 
   const matchingStudentsCountNotProcessed = AllStudentListData?.filter(
@@ -208,7 +208,7 @@ const ListOfApplications = ({
       data?.status?.submitedFormDate !== "" &&
       data?.status?.processedbyCenteron === "" &&
       data?.status?.documentVerifiedOn === "" &&
-      data?.status?.processedtoUniversityon === ""
+      data?.status?.processedtoUniversityon === "",
   ).length;
 
   const matchingStudentsCountReadyForVerif = AllStudentListData?.filter(
@@ -223,7 +223,7 @@ const ListOfApplications = ({
       StudentData?.university?._id === UniversityGetDataFromRedux?.id &&
       StudentData?.documents?.isPendency === false &&
       StudentData?.documents?.isApproved === false &&
-      StudentData?.documents?.isApprovedDate === ""
+      StudentData?.documents?.isApprovedDate === "",
   ).length;
 
   const matchingStudentsCountPendency = AllStudentListData?.filter(
@@ -236,7 +236,7 @@ const ListOfApplications = ({
       StudentData?.status?.processedtoUniversityon === "" &&
       StudentData?.documents?.isPendency === true &&
       StudentData?.documents?.isApproved === false &&
-      StudentData?.documents?.isApprovedDate === ""
+      StudentData?.documents?.isApprovedDate === "",
   ).length;
 
   const matchingStudentsCountVerified = AllStudentListData?.filter(
@@ -250,7 +250,7 @@ const ListOfApplications = ({
       StudentData?.university?._id === UniversityGetDataFromRedux?.id &&
       StudentData?.documents?.isPendency === false &&
       StudentData?.documents?.isApproved === true &&
-      StudentData?.documents?.isApprovedDate !== ""
+      StudentData?.documents?.isApprovedDate !== "",
   ).length;
 
   const matchingStudentsCountProcessedToUniversity = AllStudentListData?.filter(
@@ -265,7 +265,7 @@ const ListOfApplications = ({
       StudentData?.status?.admissionCancelDate === "" &&
       StudentData?.documents?.isPendency === false &&
       StudentData?.documents?.isApproved === true &&
-      StudentData?.documents?.isApprovedDate !== ""
+      StudentData?.documents?.isApprovedDate !== "",
   ).length;
 
   const matchingStudentsCountEnrolled = AllStudentListData?.filter(
@@ -282,8 +282,8 @@ const ListOfApplications = ({
         (studentDoc) =>
           studentDoc.isPendency === false &&
           studentDoc.isApproved === true &&
-          studentDoc.isApprovedDate !== ""
-      ).length > 0
+          studentDoc.isApprovedDate !== "",
+      ).length > 0,
   ).length;
 
   const matchingStudentsAdmissionCancel = AllStudentListData?.filter(
@@ -299,8 +299,8 @@ const ListOfApplications = ({
         (studentDoc) =>
           studentDoc.isPendency === false &&
           studentDoc.isApproved === true &&
-          studentDoc.isApprovedDate !== ""
-      ).length > 0
+          studentDoc.isApprovedDate !== "",
+      ).length > 0,
   ).length;
 
   // const LoggedUserData = useSelector((s) => s.user);
@@ -335,7 +335,7 @@ const ListOfApplications = ({
                       AdmissionsessionListData.filter(
                         (data) =>
                           data?.university === UniversityGetDataFromRedux.id &&
-                          !data?.isDeleted
+                          !data?.isDeleted,
                       ).map((data, i) => (
                         <option key={i} value={data?.name}>
                           {data?.name}
@@ -381,7 +381,7 @@ const ListOfApplications = ({
                       AllProgramsByPagination.filter(
                         (data) =>
                           data?.university?._id ===
-                            UniversityGetDataFromRedux.id && !data?.isDeleted
+                            UniversityGetDataFromRedux.id && !data?.isDeleted,
                       )?.map((data, i) => (
                         <option key={i} value={data?.name}>
                           {data?.name}
@@ -430,8 +430,8 @@ const ListOfApplications = ({
                             (university) =>
                               university?._id ===
                                 UniversityGetDataFromRedux.id &&
-                              !data?.isDeleted
-                          )
+                              !data?.isDeleted,
+                          ),
                         ).map((data, i) => (
                           <option key={i} value={data?.name}>
                             {data?.name}
@@ -606,7 +606,8 @@ const ListOfApplications = ({
                         "Form",
                         "Courier Name",
                         "Sent Date",
-                        "To Deliver",
+                        "Docket No",
+                        "View Courier Details",
                         "Courier Actions",
                       ].map((header) => (
                         <th

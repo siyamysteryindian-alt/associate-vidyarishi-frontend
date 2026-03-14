@@ -74,7 +74,7 @@ const ListOfUniversities = ({
       const response = await axios.patch(
         `${import.meta.env.VITE_BACKEND_URL}/DeleteUniversityForm`,
         { UniversityId, BooleanValue },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (response?.data?.success) {
@@ -82,14 +82,14 @@ const ListOfUniversities = ({
         Swal.fire({ title: "Deleted Successfully!", icon: "success" }).then(
           () => {
             FetchUniversitiesByPagination();
-          }
+          },
         );
       } else {
         toast.error(response?.data?.message);
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     }
   };
@@ -104,7 +104,7 @@ const ListOfUniversities = ({
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/UniversityIsActiveToggle`,
         { UniversityId, BooleanValue },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (response?.data?.success) {
         toast.success(response?.data?.message);
@@ -114,13 +114,13 @@ const ListOfUniversities = ({
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     }
   };
 
   const HandleStatusYes = (data) => HandleUpdateStatusToggle(data?._id, true);
-  const HandleStatusNo = (data) => HandleUpdateStatusToggle(data?._1d, false);
+  const HandleStatusNo = (data) => HandleUpdateStatusToggle(data?._id, false);
 
   // Vocational toggle
   const HandleUpdateVocationalToggle = async (UniversityId, BooleanValue) => {
@@ -128,7 +128,7 @@ const ListOfUniversities = ({
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/UniversityIsVocationalToggle`,
         { UniversityId, BooleanValue },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (response?.data?.success) {
         toast.success(response?.data?.message);
@@ -138,7 +138,7 @@ const ListOfUniversities = ({
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     }
   };
@@ -154,7 +154,7 @@ const ListOfUniversities = ({
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/UniversityHasLMSToggle`,
         { UniversityId, BooleanValue },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (response?.data?.success) {
         toast.success(response?.data?.message);
@@ -164,7 +164,7 @@ const ListOfUniversities = ({
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     }
   };
@@ -175,13 +175,13 @@ const ListOfUniversities = ({
   // unique center toggle
   const HandleUpdatehasUniqueCenterToggle = async (
     UniversityId,
-    BooleanValue
+    BooleanValue,
   ) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/UniversityHasUniqueCenterToggle`,
         { UniversityId, BooleanValue },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (response?.data?.success) {
         toast.success(response?.data?.message);
@@ -191,7 +191,7 @@ const ListOfUniversities = ({
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     }
   };
@@ -203,7 +203,7 @@ const ListOfUniversities = ({
   // unique studentId toggle
   const HandleUpdatehasUniqueStudentIDToggle = async (
     UniversityId,
-    BooleanValue
+    BooleanValue,
   ) => {
     try {
       const response = await axios.post(
@@ -211,7 +211,7 @@ const ListOfUniversities = ({
           import.meta.env.VITE_BACKEND_URL
         }/UniversityHasUniqueStudentIdToggle`,
         { UniversityId, BooleanValue },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (response?.data?.success) {
         toast.success(response?.data?.message);
@@ -221,7 +221,7 @@ const ListOfUniversities = ({
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     }
   };
@@ -256,13 +256,13 @@ const ListOfUniversities = ({
           import.meta.env.VITE_BACKEND_URL
         }/university-dynamic-api-key/${universityId}`,
 
-        { withCredentials: true }
+        { withCredentials: true },
       );
       toast.success(response?.data?.message || "API key deleted!");
       FetchUniversitiesByPagination();
     } catch (error) {
       toast.error(
-        error?.response?.data?.message || "Failed to delete API key."
+        error?.response?.data?.message || "Failed to delete API key.",
       );
     } finally {
       setIsSubmitting(false);
@@ -570,7 +570,7 @@ const ListOfUniversities = ({
                             </div>
                           </td>
                         </tr>
-                      )
+                      ),
                     )}
                   </tbody>
                 </table>

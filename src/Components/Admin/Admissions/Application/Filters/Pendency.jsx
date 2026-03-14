@@ -86,7 +86,7 @@ const Pendency = ({
     if (StatusDetails?.MarkAsByCenter && CompleteStudentData?._id) {
       UpdateProcessedByCenter(
         StatusDetails.MarkAsByCenter,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
       FetchAllStudentByPagination();
     }
@@ -94,7 +94,7 @@ const Pendency = ({
     if (StatusDetails?.MarkAsByUniversity && CompleteStudentData?._id) {
       UpdateProcessedByUniversity(
         StatusDetails.MarkAsByUniversity,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
       FetchAllStudentByPagination();
     }
@@ -345,7 +345,7 @@ const Pendency = ({
                               <>
                                 Completed (
                                 {ExtractDateFromDb(
-                                  StudentData?.status?.submitedFormDate
+                                  StudentData?.status?.submitedFormDate,
                                 )}
                                 )
                               </>
@@ -402,7 +402,7 @@ const Pendency = ({
                             {" "}
                             (
                             {ExtractDateFromDb(
-                              StudentData?.status?.processedbyCenteron
+                              StudentData?.status?.processedbyCenteron,
                             )}
                             )
                           </span>
@@ -532,7 +532,7 @@ const Pendency = ({
                                 {" "}
                                 Verified On (
                                 {ExtractDateFromDb(
-                                  StudentData?.documents?.isApprovedDate
+                                  StudentData?.documents?.isApprovedDate,
                                 )}
                                 )
                               </span>
@@ -573,7 +573,7 @@ const Pendency = ({
                               {" "}
                               (
                               {ExtractDateFromDb(
-                                StudentData?.status?.processedtoUniversityon
+                                StudentData?.status?.processedtoUniversityon,
                               )}
                               )
                             </span>
@@ -776,9 +776,45 @@ const Pendency = ({
                     }`}
                   >
                     {StudentData?.Courier
-                      ? StudentData?.Courier?.DropLocation
+                      ? StudentData?.Courier?.DocketNo
                       : "N/A"}
                   </div>
+                </td>
+                <td className="text-center">
+                  {ReduxUser.role === "center" && (
+                    <div className="flex justify-center gap-2">
+                      {StudentData?.Courier && (
+                        <>
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                            onClick={() =>
+                              HandleViewCourier(StudentData?.Courier)
+                            }
+                          >
+                            View
+                          </button>
+
+                          {!StudentData?.Courier?.Received && (
+                            <button
+                              className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                              onClick={() => {
+                                setSelectedCourierId(StudentData?.Courier?._id);
+                                setConfirmModal(true);
+                              }}
+                            >
+                              Mark Received
+                            </button>
+                          )}
+
+                          {StudentData?.Courier?.Received && (
+                            <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                              Received
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </td>
 
                 {/* Courier status for Admin */}
@@ -804,7 +840,7 @@ const Pendency = ({
             {AllStudentListData?.some(
               (data) =>
                 data.university?._id === UniversityGetDataFromRedux?.id &&
-                !data?.isDeleted
+                !data?.isDeleted,
             ) ? null : (
               <tr>
                 <td colSpan={20}>
@@ -820,7 +856,7 @@ const Pendency = ({
               (data) =>
                 !data?.isDeleted &&
                 data?.university?._id === "" &&
-                UniversityGetDataFromRedux?.id === ""
+                UniversityGetDataFromRedux?.id === "",
             ) && (
               <tr>
                 <td colSpan={20}>

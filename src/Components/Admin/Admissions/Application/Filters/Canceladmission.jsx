@@ -94,7 +94,7 @@ const Canceladmission = ({
     if (StatusDetails?.MarkAsByCenter && CompleteStudentData?._id) {
       UpdateProcessedByCenter(
         StatusDetails.MarkAsByCenter,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
       setRefreshApplications(true);
     }
@@ -102,7 +102,7 @@ const Canceladmission = ({
     if (StatusDetails?.MarkAsByUniversity && CompleteStudentData?._id) {
       UpdateProcessedByUniversity(
         StatusDetails.MarkAsByUniversity,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
       setRefreshApplications(true);
     }
@@ -174,7 +174,7 @@ const Canceladmission = ({
     // Role-based access
     if (
       ["Counsellor", "subCounsellor", "SubCenter"].includes(
-        LoggedUserData?.role
+        LoggedUserData?.role,
       )
     ) {
       if (StudentData?.whoCreated?._id !== LoggedUserData?._id) return false;
@@ -186,7 +186,7 @@ const Canceladmission = ({
 
     if (
       ["operation-manager", "Accountant", "Admin"].includes(
-        LoggedUserData?.role
+        LoggedUserData?.role,
       )
     ) {
       if (StudentData?.university?._id !== UniversityGetDataFromRedux?.id)
@@ -210,7 +210,7 @@ const Canceladmission = ({
         (studentDoc) =>
           studentDoc.isPendency === false &&
           studentDoc.isApproved === true &&
-          studentDoc.isApprovedDate !== ""
+          studentDoc.isApprovedDate !== "",
       ).length > 0;
 
     if (!hasValidDocs) return false;
@@ -334,7 +334,7 @@ const Canceladmission = ({
                             <>
                               Completed (
                               {ExtractDateFromDb(
-                                StudentData?.status?.submitedFormDate
+                                StudentData?.status?.submitedFormDate,
                               )}
                               )
                             </>
@@ -365,7 +365,7 @@ const Canceladmission = ({
                           {" "}
                           (
                           {ExtractDateFromDb(
-                            StudentData?.status?.processedbyCenteron
+                            StudentData?.status?.processedbyCenteron,
                           )}
                           )
                         </span>
@@ -422,7 +422,7 @@ const Canceladmission = ({
                             {" "}
                             Verified On (
                             {ExtractDateFromDb(
-                              StudentData?.documents?.isApprovedDate
+                              StudentData?.documents?.isApprovedDate,
                             )}
                             )
                           </span>
@@ -441,7 +441,7 @@ const Canceladmission = ({
                           {" "}
                           (
                           {ExtractDateFromDb(
-                            StudentData?.status?.processedtoUniversityon
+                            StudentData?.status?.processedtoUniversityon,
                           )}
                           )
                         </span>
@@ -470,7 +470,7 @@ const Canceladmission = ({
                         <span className="text-red-600 font-bold">
                           {" "}
                           {ExtractDateFromDb(
-                            StudentData?.status?.admissionCancelDate
+                            StudentData?.status?.admissionCancelDate,
                           )}
                         </span>
                       </div>
@@ -623,11 +623,48 @@ const Canceladmission = ({
                     }`}
                   >
                     {StudentData?.Courier
-                      ? StudentData?.Courier?.DropLocation
+                      ? StudentData?.Courier?.DocketNo
                       : "N/A"}
                   </div>
                 </td>
 
+                {ReduxUser.role === "center" && (
+                  <td className="text-center">
+                    <div className="flex justify-center gap-2">
+                      {StudentData?.Courier && (
+                        <>
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                            onClick={() =>
+                              HandleViewCourier(StudentData?.Courier)
+                            }
+                          >
+                            View
+                          </button>
+
+                          {!StudentData?.Courier?.Received && (
+                            <button
+                              className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                              onClick={() => {
+                                setSelectedCourierId(StudentData?.Courier?._id);
+                                setConfirmModal(true);
+                              }}
+                            >
+                              Mark Received
+                            </button>
+                          )}
+
+                          {StudentData?.Courier?.Received && (
+                            <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                              Received
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </td>
+                )}
+                
                 {/* Courier Status for Admin */}
                 {ReduxUser?.role === "Admin" && (
                   <td className="px-4 w-48 py-2 align-center">

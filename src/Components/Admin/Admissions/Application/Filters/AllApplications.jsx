@@ -1173,10 +1173,9 @@ const AllApplications = ({
                       : "N/A"}
                   </div>
                 </td>
-                {(ReduxUser.role === "Admin" ||
-                  ReduxUser.role === "operation-manager" ||
-                  ReduxUser.role === "center") && (
-                  <td className="text-center">
+
+                <td className="text-center">
+                  {ReduxUser.role === "center" && (
                     <div className="flex justify-center gap-2">
                       {StudentData?.Courier && (
                         <>
@@ -1209,8 +1208,8 @@ const AllApplications = ({
                         </>
                       )}
                     </div>
-                  </td>
-                )}
+                  )}
+                </td>
 
                 {(ReduxUser.role === "Admin" ||
                   ReduxUser.role === "operation-manager") && (

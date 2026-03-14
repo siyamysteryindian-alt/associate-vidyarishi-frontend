@@ -113,7 +113,7 @@ const Markaspendency = ({
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (response?.data?.success) {
@@ -127,10 +127,10 @@ const Markaspendency = ({
     } catch (error) {
       console.log(error);
       setErrorPendency(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     } finally {
       setLoadingPendency(false);
@@ -140,7 +140,8 @@ const Markaspendency = ({
   useEffect(() => {}, [BooleanCheckBox]);
 
   return (
-    <div className="absolute z-30 inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+    // <div className="absolute z-30 inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+    <div className="fixed z-[9999] inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
       <div className="flex justify-center items-center mt-4 mb-4 w-full px-4">
         <div className="bg-white dark:bg-slate-900 dark:text-white rounded-2xl w-[90vw] max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-700">
           {/* Header */}

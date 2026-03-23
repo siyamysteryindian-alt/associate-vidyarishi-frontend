@@ -98,7 +98,7 @@ const Processedto_university = ({
     if (StatusDetails?.MarkAsByCenter && CompleteStudentData?._id) {
       UpdateProcessedByCenter(
         StatusDetails.MarkAsByCenter,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
       setRefreshApplications(true);
     }
@@ -106,7 +106,7 @@ const Processedto_university = ({
     if (StatusDetails?.MarkAsByUniversity && CompleteStudentData?._id) {
       UpdateProcessedByUniversity(
         StatusDetails.MarkAsByUniversity,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
       setRefreshApplications(true);
     }
@@ -228,7 +228,7 @@ const Processedto_university = ({
   const hasAnyInUniversity = AllStudentListData?.some(
     (data) =>
       !data?.isDeleted &&
-      data?.university?._id === UniversityGetDataFromRedux?.id
+      data?.university?._id === UniversityGetDataFromRedux?.id,
   );
 
   return (
@@ -356,7 +356,7 @@ const Processedto_university = ({
                             <>
                               Completed (
                               {ExtractDateFromDb(
-                                StudentData?.status?.submitedFormDate
+                                StudentData?.status?.submitedFormDate,
                               )}
                               )
                             </>
@@ -407,7 +407,7 @@ const Processedto_university = ({
                           {" "}
                           (
                           {ExtractDateFromDb(
-                            StudentData?.status?.processedbyCenteron
+                            StudentData?.status?.processedbyCenteron,
                           )}
                           )
                         </span>
@@ -464,7 +464,7 @@ const Processedto_university = ({
                             {" "}
                             Verified On (
                             {ExtractDateFromDb(
-                              StudentData?.documents?.isApprovedDate
+                              StudentData?.documents?.isApprovedDate,
                             )}
                             )
                           </span>
@@ -483,7 +483,7 @@ const Processedto_university = ({
                           {" "}
                           (
                           {ExtractDateFromDb(
-                            StudentData?.status?.processedtoUniversityon
+                            StudentData?.status?.processedtoUniversityon,
                           )}
                           )
                         </span>
@@ -512,7 +512,7 @@ const Processedto_university = ({
                         <span className="text-rose-600 font-bold">
                           {" "}
                           {ExtractDateFromDb(
-                            StudentData?.status?.admissionCancelDate
+                            StudentData?.status?.admissionCancelDate,
                           )}
                         </span>
                       </div>
@@ -717,6 +717,42 @@ const Processedto_university = ({
                       ? StudentData?.Courier?.DropLocation
                       : "N/A"}
                   </div>
+                </td>
+                <td className="text-center">
+                  {ReduxUser.role === "center" && (
+                    <div className="flex justify-center gap-2">
+                      {StudentData?.Courier && (
+                        <>
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                            onClick={() =>
+                              HandleViewCourier(StudentData?.Courier)
+                            }
+                          >
+                            View
+                          </button>
+
+                          {!StudentData?.Courier?.Received && (
+                            <button
+                              className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                              onClick={() => {
+                                setSelectedCourierId(StudentData?.Courier?._id);
+                                setConfirmModal(true);
+                              }}
+                            >
+                              Mark Received
+                            </button>
+                          )}
+
+                          {StudentData?.Courier?.Received && (
+                            <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                              Received
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </td>
 
                 {/* courier status / assign */}

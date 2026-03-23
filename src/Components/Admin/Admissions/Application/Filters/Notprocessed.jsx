@@ -63,7 +63,7 @@ const Notprocessed = ({
     if (StatusDetails?.MarkAsByCenter && CompleteStudentData?._id) {
       UpdateProcessedByCenter(
         StatusDetails.MarkAsByCenter,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
     }
     // MarkAsByUniversity is commented intentionally as per your original code
@@ -98,7 +98,7 @@ const Notprocessed = ({
             },
             {
               withCredentials: true,
-            }
+            },
           );
 
           if (response?.data?.success) {
@@ -107,7 +107,7 @@ const Notprocessed = ({
                 if (result?.isConfirmed) {
                   setRefreshApplications(true);
                 }
-              }
+              },
             );
           } else {
             toast.error(response?.data?.message || "Failed to Process.");
@@ -115,7 +115,7 @@ const Notprocessed = ({
         } catch (error) {
           toast.error(
             error.response?.data?.message ||
-              "An error occurred. Please try again."
+              "An error occurred. Please try again.",
           );
         }
       } else {
@@ -159,6 +159,37 @@ const Notprocessed = ({
   const HandlOANumber = (e) => {
     e.preventDefault();
     setOAData(e.target.value);
+  };
+
+  const [viewCourierData, setViewCourierData] = useState(null);
+  const [viewCourierModal, setViewCourierModal] = useState(false);
+  const HandleViewCourier = (courier) => {
+    setViewCourierData(courier);
+    setViewCourierModal(true);
+  };
+
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [selectedCourierId, setSelectedCourierId] = useState(null);
+  const HandleMarkReceived = async (courierId) => {
+    try {
+      const confirm = window.confirm("Mark this courier as received?");
+
+      if (!confirm) return;
+
+      await axios.patch(
+        `${import.meta.env.VITE_BACKEND_URL}/mark-courier-received/${courierId}`,
+        {},
+        { withCredentials: true },
+      );
+
+      toast.success("Courier marked as received");
+
+      // refresh table
+      FetchAllStudentByPagination(AllStudentCurrentPage, AllStudentLimit);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update courier status");
+    }
   };
 
   const ExtractDateFromDb = (submitFormDate) => {
@@ -388,7 +419,7 @@ const Notprocessed = ({
                               <>
                                 Completed (
                                 {ExtractDateFromDb(
-                                  StudentData?.status?.submitedFormDate
+                                  StudentData?.status?.submitedFormDate,
                                 )}
                                 )
                               </>
@@ -461,7 +492,7 @@ const Notprocessed = ({
                             {" "}
                             (
                             {ExtractDateFromDb(
-                              StudentData?.status?.processedbyCenteron
+                              StudentData?.status?.processedbyCenteron,
                             )}
                             )
                           </span>
@@ -535,7 +566,7 @@ const Notprocessed = ({
                                 {" "}
                                 Verified On (
                                 {ExtractDateFromDb(
-                                  StudentData?.documents?.isApprovedDate
+                                  StudentData?.documents?.isApprovedDate,
                                 )}
                                 )
                               </span>
@@ -555,7 +586,7 @@ const Notprocessed = ({
                               {" "}
                               (
                               {ExtractDateFromDb(
-                                StudentData?.status?.processedtoUniversityon
+                                StudentData?.status?.processedtoUniversityon,
                               )}
                               )
                             </span>
@@ -759,9 +790,45 @@ const Notprocessed = ({
                     }`}
                   >
                     {StudentData?.Courier
-                      ? StudentData?.Courier?.DropLocation
+                      ? StudentData?.Courier?.DocketNo
                       : "N/A"}
                   </div>
+                </td>
+                <td className="text-center">
+                  {ReduxUser.role === "center" && (
+                    <div className="flex justify-center gap-2">
+                      {StudentData?.Courier && (
+                        <>
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                            onClick={() =>
+                              HandleViewCourier(StudentData?.Courier)
+                            }
+                          >
+                            View
+                          </button>
+
+                          {!StudentData?.Courier?.Received && (
+                            <button
+                              className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                              onClick={() => {
+                                setSelectedCourierId(StudentData?.Courier?._id);
+                                setConfirmModal(true);
+                              }}
+                            >
+                              Mark Received
+                            </button>
+                          )}
+
+                          {StudentData?.Courier?.Received && (
+                            <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                              Received
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </td>
 
                 {/* Courier Status */}
@@ -792,7 +859,7 @@ const Notprocessed = ({
             {AllStudentListData?.some(
               (data) =>
                 data.university?._id === UniversityGetDataFromRedux?.id &&
-                !data?.isDeleted
+                !data?.isDeleted,
             ) ? null : (
               <tr>
                 <td colSpan={20}>
@@ -808,7 +875,7 @@ const Notprocessed = ({
               (data) =>
                 !data?.isDeleted &&
                 data?.university?._id === "" &&
-                UniversityGetDataFromRedux?.id === ""
+                UniversityGetDataFromRedux?.id === "",
             ) && (
               <tr>
                 <td colSpan={20}>

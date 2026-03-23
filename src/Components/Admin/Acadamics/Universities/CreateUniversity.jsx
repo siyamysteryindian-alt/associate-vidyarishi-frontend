@@ -101,7 +101,7 @@ const CreateUniversity = ({
           photo: UniversityDataform?.profile_Photo,
           role: "University",
         },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (Response?.data?.success) {
@@ -114,7 +114,7 @@ const CreateUniversity = ({
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     } finally {
       setIsSubmitting(false);
@@ -228,6 +228,7 @@ const CreateUniversity = ({
               }}
             >
               <form
+                id="createUniversityForm"
                 onSubmit={HandleSubmitUniversityForm}
                 className="space-y-4 pt-2"
               >
@@ -628,8 +629,23 @@ const CreateUniversity = ({
                 >
                   Cancel
                 </button>
-
                 <button
+                  type="submit"
+                  form="createUniversityForm"
+                  disabled={isSaveDisabled}
+                  className="px-6 py-2 text-xs font-semibold rounded-full flex items-center gap-2 justify-center"
+                  style={{
+                    background: isSaveDisabled
+                      ? "rgba(164,245,166,0.35)"
+                      : "var(--accent-mint)",
+                    color: "var(--brand-ink)",
+                    boxShadow: isSaveDisabled ? "none" : "var(--soft-shadow)",
+                    cursor: isSaveDisabled ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {isSubmitting ? "Saving..." : "Save"}
+                </button>
+                {/* <button
                   form={undefined}
                   type="submit"
                   onClick={(e) => {
@@ -675,7 +691,7 @@ const CreateUniversity = ({
                       />
                     </svg>
                   )}
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

@@ -26,7 +26,7 @@ const ViewPendency = ({
     highSchoolMarksheet: CompleteStudentData?.highSchool?.marksheetRemark,
     intermediateMarksheet: CompleteStudentData?.intermediate?.marksheetRemark,
     underGraduationMarksheet:
-      CompleteStudentData?.underGradutaion?.marksheetRemark || [],
+      CompleteStudentData?.underGraduation?.marksheetRemark || [],
     postGraduationMarksheet:
       CompleteStudentData?.postGraduation?.marksheetRemark || [],
     OtherAcademicsMarksheet:

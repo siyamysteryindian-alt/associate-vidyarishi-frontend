@@ -100,7 +100,7 @@ const Readyfor_verification = ({
     if (StatusDetails?.MarkAsByCenter && CompleteStudentData?._id) {
       UpdateProcessedByCenter(
         StatusDetails.MarkAsByCenter,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
       FetchAllStudentByPagination();
     }
@@ -108,7 +108,7 @@ const Readyfor_verification = ({
     if (StatusDetails?.MarkAsByUniversity && CompleteStudentData?._id) {
       UpdateProcessedByUniversity(
         StatusDetails.MarkAsByUniversity,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
       FetchAllStudentByPagination();
     }
@@ -184,6 +184,37 @@ const Readyfor_verification = ({
   useEffect(() => {
     GetLoginUserDetails();
   }, []);
+
+  const [viewCourierData, setViewCourierData] = useState(null);
+  const [viewCourierModal, setViewCourierModal] = useState(false);
+  const HandleViewCourier = (courier) => {
+    setViewCourierData(courier);
+    setViewCourierModal(true);
+  };
+
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [selectedCourierId, setSelectedCourierId] = useState(null);
+  const HandleMarkReceived = async (courierId) => {
+    try {
+      const confirm = window.confirm("Mark this courier as received?");
+
+      if (!confirm) return;
+
+      await axios.patch(
+        `${import.meta.env.VITE_BACKEND_URL}/mark-courier-received/${courierId}`,
+        {},
+        { withCredentials: true },
+      );
+
+      toast.success("Courier marked as received");
+
+      // refresh table
+      FetchAllStudentByPagination(AllStudentCurrentPage, AllStudentLimit);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update courier status");
+    }
+  };
 
   // FILTER: only "Ready for Verification" students + role-based visibility
   const visibleStudents = AllStudentListData?.filter((data) => {
@@ -365,7 +396,7 @@ const Readyfor_verification = ({
                               <>
                                 Completed (
                                 {ExtractDateFromDb(
-                                  StudentData?.status?.submitedFormDate
+                                  StudentData?.status?.submitedFormDate,
                                 )}
                                 )
                               </>
@@ -422,7 +453,7 @@ const Readyfor_verification = ({
                             {" "}
                             (
                             {ExtractDateFromDb(
-                              StudentData?.status?.processedbyCenteron
+                              StudentData?.status?.processedbyCenteron,
                             )}
                             )
                           </span>
@@ -521,7 +552,7 @@ const Readyfor_verification = ({
                                 {" "}
                                 Verified On (
                                 {ExtractDateFromDb(
-                                  StudentData?.documents?.isApprovedDate
+                                  StudentData?.documents?.isApprovedDate,
                                 )}
                                 )
                               </span>
@@ -541,7 +572,7 @@ const Readyfor_verification = ({
                               {" "}
                               (
                               {ExtractDateFromDb(
-                                StudentData?.status?.processedtoUniversityon
+                                StudentData?.status?.processedtoUniversityon,
                               )}
                               )
                             </span>
@@ -744,9 +775,45 @@ const Readyfor_verification = ({
                     }`}
                   >
                     {StudentData?.Courier
-                      ? StudentData?.Courier?.DropLocation
+                      ? StudentData?.Courier?.DocketNo
                       : "N/A"}
                   </div>
+                </td>
+                <td className="text-center">
+                  {ReduxUser.role === "center" && (
+                    <div className="flex justify-center gap-2">
+                      {StudentData?.Courier && (
+                        <>
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                            onClick={() =>
+                              HandleViewCourier(StudentData?.Courier)
+                            }
+                          >
+                            View
+                          </button>
+
+                          {!StudentData?.Courier?.Received && (
+                            <button
+                              className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                              onClick={() => {
+                                setSelectedCourierId(StudentData?.Courier?._id);
+                                setConfirmModal(true);
+                              }}
+                            >
+                              Mark Received
+                            </button>
+                          )}
+
+                          {StudentData?.Courier?.Received && (
+                            <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                              Received
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </td>
 
                 {/* Courier status for Admin */}
@@ -772,7 +839,7 @@ const Readyfor_verification = ({
             {AllStudentListData?.some(
               (data) =>
                 data.university?._id === UniversityGetDataFromRedux?.id &&
-                !data?.isDeleted
+                !data?.isDeleted,
             ) ? null : (
               <tr>
                 <td colSpan={20}>
@@ -788,7 +855,7 @@ const Readyfor_verification = ({
               (data) =>
                 !data?.isDeleted &&
                 data?.university?._id === "" &&
-                UniversityGetDataFromRedux?.id === ""
+                UniversityGetDataFromRedux?.id === "",
             ) && (
               <tr>
                 <td colSpan={20}>

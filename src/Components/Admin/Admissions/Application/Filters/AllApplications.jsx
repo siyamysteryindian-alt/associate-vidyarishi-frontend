@@ -948,13 +948,23 @@ const AllApplications = ({
                       )}
 
                       {/* admission cancel date */}
-                      {StudentData?.status?.admissionCancelDate && (
+                      {/* {StudentData?.status?.admissionCancelDate && (
                         <div>
                           <span className="font-semibold text-slate-900 dark:text-white">
                             Admission Cancel on:
                           </span>
                           <span className="text-rose-600 font-bold">
                             {" "}
+                            {ExtractDateFromDb(
+                              StudentData?.status?.admissionCancelDate,
+                            )}
+                          </span>
+                        </div>
+                      )} */}
+                      {StudentData?.status?.admissionCancelDate && (
+                        <div>
+                          <span>Admission Cancel on:</span>
+                          <span>
                             {ExtractDateFromDb(
                               StudentData?.status?.admissionCancelDate,
                             )}
@@ -1173,10 +1183,9 @@ const AllApplications = ({
                       : "N/A"}
                   </div>
                 </td>
-                {(ReduxUser.role === "Admin" ||
-                  ReduxUser.role === "operation-manager" ||
-                  ReduxUser.role === "center") && (
-                  <td className="text-center">
+
+                <td className="text-center">
+                  {ReduxUser.role === "center" && (
                     <div className="flex justify-center gap-2">
                       {StudentData?.Courier && (
                         <>
@@ -1209,8 +1218,8 @@ const AllApplications = ({
                         </>
                       )}
                     </div>
-                  </td>
-                )}
+                  )}
+                </td>
 
                 {(ReduxUser.role === "Admin" ||
                   ReduxUser.role === "operation-manager") && (

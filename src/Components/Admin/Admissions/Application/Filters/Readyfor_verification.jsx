@@ -185,6 +185,37 @@ const Readyfor_verification = ({
     GetLoginUserDetails();
   }, []);
 
+  const [viewCourierData, setViewCourierData] = useState(null);
+  const [viewCourierModal, setViewCourierModal] = useState(false);
+  const HandleViewCourier = (courier) => {
+    setViewCourierData(courier);
+    setViewCourierModal(true);
+  };
+
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [selectedCourierId, setSelectedCourierId] = useState(null);
+  const HandleMarkReceived = async (courierId) => {
+    try {
+      const confirm = window.confirm("Mark this courier as received?");
+
+      if (!confirm) return;
+
+      await axios.patch(
+        `${import.meta.env.VITE_BACKEND_URL}/mark-courier-received/${courierId}`,
+        {},
+        { withCredentials: true },
+      );
+
+      toast.success("Courier marked as received");
+
+      // refresh table
+      FetchAllStudentByPagination(AllStudentCurrentPage, AllStudentLimit);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update courier status");
+    }
+  };
+
   // FILTER: only "Ready for Verification" students + role-based visibility
   const visibleStudents = AllStudentListData?.filter((data) => {
     if (data?.isDeleted) return false;

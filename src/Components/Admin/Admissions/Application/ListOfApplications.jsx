@@ -128,23 +128,38 @@ const ListOfApplications = ({
   const [SearchApplicationBoolean, setSearchApplicationBoolean] =
     useState(false);
 
+  // const HandleInputSearchApplication = async (e) => {
+  //   e.preventDefault();
+  //   const { name, value } = e.target;
+  //   setSearchApplicationKeyWord((Preve) => ({
+  //     ...Preve,
+  //     [name]: value,
+  //   }));
+
+  //   if (value) {
+  //     resetTabs();
+  //     setAllapplications(true);
+  //   }
+
+  //   await FetchAllStudentByPagination(1, 100, value);
+  // };
+
+  // Filter 1
   const HandleInputSearchApplication = async (e) => {
-    e.preventDefault();
     const { name, value } = e.target;
-    setSearchApplicationKeyWord((Preve) => ({
-      ...Preve,
+
+    setSearchApplicationKeyWord((prev) => ({
+      ...prev,
       [name]: value,
     }));
 
     if (value) {
       resetTabs();
-      setAllapplications(true);
+      setSearchApplicationBoolean(true); // ✅ ADD THIS
     }
 
     await FetchAllStudentByPagination(1, 100, value);
   };
-
-  // Filter 1
   const [Filter1ListStateData, setFilter1ListStateData] = useState({
     ChangeYear: "",
     ChangeDepartment: " ",
@@ -157,25 +172,40 @@ const ListOfApplications = ({
 
   const [FilterOneBoolean, setFilterOneBoolean] = useState(false);
 
+  // const HandleFilter1applicationsListData = async (e) => {
+  //   e.preventDefault();
+  //   const { name, value } = e.target;
+  //   setFilter1ListStateData((Preve) => ({
+  //     ...Preve,
+  //     [name]: value,
+  //   }));
+
+  //   let Programs;
+  //   if (typeof value === "string") {
+  //     Programs = value === "" ? " " : value;
+  //   }
+
+  //   if (value) {
+  //     resetTabs();
+  //     setAllapplications(true);
+  //   }
+
+  //   await FetchAllStudentByPagination(1, 100, Programs, value, value);
+  // };
   const HandleFilter1applicationsListData = async (e) => {
-    e.preventDefault();
     const { name, value } = e.target;
-    setFilter1ListStateData((Preve) => ({
-      ...Preve,
+
+    setFilter1ListStateData((prev) => ({
+      ...prev,
       [name]: value,
     }));
 
-    let Programs;
-    if (typeof value === "string") {
-      Programs = value === "" ? " " : value;
-    }
-
     if (value) {
       resetTabs();
-      setAllapplications(true);
+      setFilterOneBoolean(true); // ✅ ADD THIS
     }
 
-    await FetchAllStudentByPagination(1, 100, Programs, value, value);
+    await FetchAllStudentByPagination(1, 100, value);
   };
 
   const LoggedUserDataFromRedux = useSelector((state) => state.user);
@@ -286,6 +316,24 @@ const ListOfApplications = ({
       ).length > 0,
   ).length;
 
+  // const matchingStudentsAdmissionCancel = AllStudentListData?.filter(
+  //   (StudentData) =>
+  //     !StudentData?.isDeleted &&
+  //     StudentData?.university?._id === UniversityGetDataFromRedux?.id &&
+  //     StudentData?.status?.TrackStatus === "4" &&
+  //     StudentData?.status?.submitedFormDate !== "" &&
+  //     StudentData?.status?.processedbyCenteron !== "" &&
+  //     StudentData?.status?.processedtoUniversityon !== "" &&
+  //     StudentData?.status?.admissionCancelDate.trim() !== "" &&
+  //     Documents.filter(
+  //       (studentDoc) =>
+  //         studentDoc.isPendency === false &&
+  //         studentDoc.isApproved === true &&
+  //         studentDoc.isApprovedDate !== "",
+  //     ).length > 0,
+  // ).length;
+
+  // const LoggedUserData = useSelector((s) => s.user);
   const matchingStudentsAdmissionCancel = AllStudentListData?.filter(
     (StudentData) =>
       !StudentData?.isDeleted &&
@@ -294,16 +342,11 @@ const ListOfApplications = ({
       StudentData?.status?.submitedFormDate !== "" &&
       StudentData?.status?.processedbyCenteron !== "" &&
       StudentData?.status?.processedtoUniversityon !== "" &&
-      StudentData?.status?.admissionCancelDate.trim() !== "" &&
-      Documents.filter(
-        (studentDoc) =>
-          studentDoc.isPendency === false &&
-          studentDoc.isApproved === true &&
-          studentDoc.isApprovedDate !== "",
-      ).length > 0,
+      StudentData?.status?.admissionCancelDate?.trim() !== "" &&
+      StudentData?.documents?.isPendency === false &&
+      StudentData?.documents?.isApproved === true &&
+      StudentData?.documents?.isApprovedDate !== "",
   ).length;
-
-  // const LoggedUserData = useSelector((s) => s.user);
 
   return (
     <>

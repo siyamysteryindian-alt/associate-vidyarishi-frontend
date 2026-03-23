@@ -107,9 +107,9 @@ const AdminCenterLedger = () => {
   const PendingNotpaid = useMemo(
     () =>
       AllStudentListData.filter(
-        (data) => data?.payments?.paymentStatus === "pending"
+        (data) => data?.payments?.paymentStatus === "pending",
       ).length,
-    [AllStudentListData]
+    [AllStudentListData],
   );
 
   const AllCenterPayments = useMemo(
@@ -118,36 +118,46 @@ const AdminCenterLedger = () => {
         (data) =>
           data?.SubCourse?.admissionFeeId?.feeAmount &&
           data?.payments?.paymentStatus !== "pending" &&
-          data?.payments?.paymentStatus !== "approved"
+          data?.payments?.paymentStatus !== "approved",
       ).length,
-    [AllStudentListData]
+    [AllStudentListData],
   );
 
   const ApprovedCenterPayments = useMemo(
     () =>
       AllStudentListData.filter(
-        (f) => f?.payments?.paymentStatus === "approved"
+        (f) => f?.payments?.paymentStatus === "approved",
       ).length,
-    [AllStudentListData]
+    [AllStudentListData],
   );
 
   const PendingWalletListWithFilter = useMemo(
     () =>
       GetWallet.filter((w) => w?.WalletStatus === "pending" && !w?.isDeleted)
         .length,
-    [GetWallet]
+    [GetWallet],
   );
   const ApprovedWalletListWithFilter = useMemo(
     () =>
       GetWallet.filter((w) => w?.WalletStatus === "approved" && !w?.isDeleted)
         .length,
-    [GetWallet]
+    [GetWallet],
   );
   const RejectedWalletListWithFilter = useMemo(
     () =>
       GetWallet.filter((w) => w?.WalletStatus === "rejected" && !w?.isDeleted)
         .length,
-    [GetWallet]
+    [GetWallet],
+  );
+
+  const ReRegistrationCount = useMemo(
+    () =>
+      AllStudentListData.filter(
+        (student) =>
+          student?.status?.admissionCancelDate &&
+          student?.status?.admissionCancelDate.trim() !== "",
+      ).length,
+    [AllStudentListData],
   );
 
   // handlers
@@ -171,16 +181,16 @@ const AdminCenterLedger = () => {
   };
 
   // When any filter applied, show fresh as default view (same behaviour you had)
-  useEffect(() => {
-    if (
-      filters?.CenterFilter ||
-      filters?.AdmissionFilter ||
-      filters?.ExamFilter
-    ) {
-      setActiveView("fresh");
-    }
-    // eslint-disable-next-line
-  }, [filters]);
+  // useEffect(() => {
+  //   if (
+  //     filters?.CenterFilter ||
+  //     filters?.AdmissionFilter ||
+  //     filters?.ExamFilter
+  //   ) {
+  //     setActiveView("fresh");
+  //   }
+  //   // eslint-disable-next-line
+  // }, [filters]);
 
   // page change safe helpers (kept semantics from your Departments example)
   const handlePageChangeSafe = (pageNumber) => {
@@ -201,6 +211,13 @@ const AdminCenterLedger = () => {
     // if your pagination hook exposes a setter, call it here; otherwise call FetchAllStudentByPagination with new limit:
     FetchAllStudentByPagination(1, value, filters.CenterFilter || "");
   };
+  useEffect(() => {
+    FetchAllStudentByPagination(
+      AllStudentCurrentPage,
+      AllStudentLimit,
+      filters.CenterFilter,
+    );
+  }, [filters]);
 
   // table headers (based on activeView)
   const headers =
@@ -225,7 +242,16 @@ const AdminCenterLedger = () => {
           "Admission Session",
           "Payable Amount",
           "Status",
+          "Action",
         ];
+  // : [
+  //     "Sr No",
+  //     "Student Name",
+  //     "Admission Type",
+  //     "Admission Session",
+  //     "Payable Amount",
+  //     "Status",
+  //   ];
 
   // UI: header bar & actions similar to AdminDepartments
   return (
@@ -310,8 +336,8 @@ const AdminCenterLedger = () => {
                               (university) =>
                                 university?._id ===
                                   UniversityGetDataFromRedux?.id &&
-                                !data?.isDeleted
-                            )
+                                !data?.isDeleted,
+                            ),
                           ).map((data, i) => (
                             <option key={i} value={data?.name}>
                               {data?.name}
@@ -334,7 +360,7 @@ const AdminCenterLedger = () => {
                     >
                       <option value="">Select</option>
                       {AdmissionsessionListData?.filter(
-                        (s) => !s?.isDeleted
+                        (s) => !s?.isDeleted,
                       ).map((s, i) => (
                         <option key={i} value={s?.name}>
                           {s?.name}
@@ -396,6 +422,15 @@ const AdminCenterLedger = () => {
                     }`}
                   >
                     Processed - {ApprovedCenterPayments}
+                  </button>
+
+                  <button
+                    onClick={HandleReRegisterButton}
+                    className={`px-4 py-1.5 text-xs text-gray-900 bg-white border ${
+                      activeView === "re-register" ? "bg-yellow-300" : ""
+                    }`}
+                  >
+                    Re-Registration - {ReRegistrationCount}
                   </button>
                 </div>
 
@@ -473,7 +508,10 @@ const AdminCenterLedger = () => {
                       GetAllPaymentData={GetAllPaymentData}
                     />
                   ) : activeView === "re-register" ? (
-                    <Re_Reg_Students />
+                    <Re_Reg_Students
+                      AllStudentListData={AllStudentListData}
+                      LoggedUserData={LoggedUserData}
+                    />
                   ) : activeView === "processed" ? (
                     <Processed
                       FetchAllStudentByPagination={FetchAllStudentByPagination}
@@ -505,7 +543,10 @@ const AdminCenterLedger = () => {
                       GetAllPaymentData={GetAllPaymentData}
                     />
                   ) : activeView === "filter" ? (
-                    <FilterList />
+                    <FilterList
+                      AllStudentListData={AllStudentListData}
+                      filters={filters}
+                    />
                   ) : activeView === "wallet-approved" ? (
                     <ListOf_ApprovedWalletList
                       setRefreshForWallet={setRefreshForWallet}
@@ -581,8 +622,8 @@ const AdminCenterLedger = () => {
                     handlePageChangeSafe(
                       Math.min(
                         AllStudentTotalPages || 1,
-                        AllStudentCurrentPage + 1
-                      )
+                        AllStudentCurrentPage + 1,
+                      ),
                     )
                   }
                   className="px-3 py-1 rounded border"

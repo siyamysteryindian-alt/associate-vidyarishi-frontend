@@ -948,13 +948,23 @@ const AllApplications = ({
                       )}
 
                       {/* admission cancel date */}
-                      {StudentData?.status?.admissionCancelDate && (
+                      {/* {StudentData?.status?.admissionCancelDate && (
                         <div>
                           <span className="font-semibold text-slate-900 dark:text-white">
                             Admission Cancel on:
                           </span>
                           <span className="text-rose-600 font-bold">
                             {" "}
+                            {ExtractDateFromDb(
+                              StudentData?.status?.admissionCancelDate,
+                            )}
+                          </span>
+                        </div>
+                      )} */}
+                      {StudentData?.status?.admissionCancelDate && (
+                        <div>
+                          <span>Admission Cancel on:</span>
+                          <span>
                             {ExtractDateFromDb(
                               StudentData?.status?.admissionCancelDate,
                             )}

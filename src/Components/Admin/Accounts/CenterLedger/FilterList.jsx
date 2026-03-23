@@ -1,151 +1,113 @@
 import React from "react";
-import { AiTwotoneEdit } from "react-icons/ai";
-import { MdCancel, MdDelete } from "react-icons/md";
-import image from "../../../../../public/logo.png";
-import { FcApproval } from "react-icons/fc";
 
-const FilterList = () => {
-  return (
-    <>
-      {/* <!-- Table --> */}
-      <tbody className="overflow-x-scroll ">
-        <tr className="bg-white text-sm border-b-4 border-b-slate-300 m-2 ">
-          {/* SR NO */}
-          <th
-            scope="row"
-            className="px-4 py-2 whitespace-nowrap dark:text-white align-top"
-          >
-            <div className="w-[5vh] flex gap-y-1 flex-col items-start">
-              <div className="text-base text-gray-900">1</div>
-            </div>
-          </th>
+const FilterList = ({ AllStudentListData = [], filters }) => {
 
-          {/* Photo */}
-          <td className="px-2 py-2 align-top ">
-            <div className="w-[12vh] flex gap-y-1 flex-row">
-              <img src={image} alt="" className="w-20 h-20 border " />
-            </div>
-          </td>
+  const filteredStudents = AllStudentListData.filter((student) => {
+    const centerMatch =
+      !filters.CenterFilter ||
+      student?.center?.name?.toLowerCase() ===
+        filters.CenterFilter.toLowerCase();
 
-          {/* transaction id */}
-          <th
-            scope="row"
-            className="px-4 py-2 whitespace-nowrap dark:text-white align-top"
-          >
-            <div className="w-[20vh] flex gap-y-1 flex-col items-start">
-              <div className="text-base text-gray-900">
-                <span>First Filter</span>
-                <span> (00045)</span>
-              </div>
-            </div>
-          </th>
+    const admissionMatch =
+      !filters.AdmissionFilter ||
+      student?.admissionSession?.name?.toLowerCase() ===
+        filters.AdmissionFilter.toLowerCase();
 
-          {/* Gateway id */}
-          <th
-            scope="row"
-            className="px-4 py-2 whitespace-nowrap dark:text-white align-top"
-          >
-            <div className="w-[20vh] flex gap-y-1 flex-col items-start">
-              <div className="text-base text-gray-900">
-                <span>Karthik</span>
-                <span> (00045)</span>
-              </div>
-            </div>
-          </th>
+    return centerMatch && admissionMatch;
+  });
 
-          {/* mode */}
-          <th
-            scope="row"
-            className="px-4 py-2 whitespace-nowrap dark:text-white align-top"
-          >
-            <div className="w-[20vh] flex gap-y-1 flex-col items-start">
-              <div className="text-base text-gray-900">
-                <span>Karthik</span>
-                <span> (00045)</span>
-              </div>
-            </div>
-          </th>
-
-          {/* Bank Name */}
-          <th
-            scope="row"
-            className="px-4 py-2 whitespace-nowrap dark:text-white align-top"
-          >
-            <div className="w-[20vh] flex gap-y-1 flex-col items-start">
-              <div className="text-base text-gray-900">
-                <span>Karthik</span>
-                <span> (00045)</span>
-              </div>
-            </div>
-          </th>
-
-          {/* Amount */}
-          <td className="px-4 py-2 align-top">
-            <div className="w-[15vh] flex gap-y-1 flex-row">Permission</div>
-          </td>
-
-          {/* STUDENT */}
-          <td className="px-4 py-2 align-top">
-            <div className="w-[10vh] flex gap-y-1 flex-col">
-              <div>1 </div>
-            </div>
-          </td>
-
-          {/* Payment By  */}
-          <td className="px-4 py-2 align-top">
-            <div className="w-[20vh] flex gap-y-1 flex-col font-bold">
-              <div>SK ACADEMY </div>
-            </div>
-          </td>
-
-          {/* Date  */}
-          <td className="px-4 py-2 align-top">
-            <div className="w-[15vh] flex gap-y-1 flex-col font-bold">
-              <div>20/09/2024</div>
-            </div>
-          </td>
-
-          {/* Status */}
-          <td className="px-4 py-2 align-top ">
-            <div className="w-[15vh] flex gap-y-1 flex-col">
-              <div>
-                <span className="text-green-600 font-bold"> Approve</span>
-              </div>
-            </div>
-          </td>
-
-          {/* Actions */}
-          <td className="px-4 py-2  align-top ">
-            <div className="w-[15vh] flex gap-3 flex-row">
-              <button
-                title="Approve"
-                className="font-medium text-green-600 dark:text-green-500 hover:underline"
-              >
-                <FcApproval size={20} />
-              </button>
-              <button
-                title="Reject"
-                className="font-medium text-red-600 dark:text-red-500 hover:underline"
-              >
-                <MdCancel size={18} />
-              </button>
-              <button
-                title="Edit Payment"
-                className="font-medium text-green-600 dark:text-green-500 hover:underline"
-              >
-                <AiTwotoneEdit size={18} />
-              </button>
-              <button
-                title="Delete Payment"
-                className="font-medium text-red-600 dark:text-red-500 hover:underline"
-              >
-                <MdDelete size={18} />
-              </button>
-            </div>
+  if (filteredStudents.length === 0) {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={7} className="px-4 py-8 text-center text-sm text-gray-500">
+            No Records Found
           </td>
         </tr>
       </tbody>
-    </>
+    );
+  }
+
+  return (
+    <tbody className="text-sm">
+      {filteredStudents.map((data, i) => {
+
+        const fee = data?.SubCourse?.admissionFeeId?.feeAmount ?? "-";
+        const paymentStatus = data?.payments?.paymentStatus ?? "";
+
+        const displayStatus =
+          paymentStatus === "approved"
+            ? "Approved"
+            : paymentStatus === "pending"
+            ? "Pending"
+            : paymentStatus === "rejected"
+            ? "Rejected"
+            : "—";
+
+        return (
+          <tr
+            key={data?._id ?? i}
+            className="bg-white dark:bg-slate-900 dark:text-white text-sm border-b"
+          >
+            {/* SR NO */}
+            <th
+              scope="row"
+              className="px-4 py-1.5 whitespace-nowrap align-top text-sm font-medium text-gray-900 dark:text-white"
+            >
+              {i + 1}
+            </th>
+
+            {/* Student Name */}
+            <td className="px-4 py-1.5 align-top">
+              <div className="font-semibold text-sm truncate">
+                {data?.fullName || "—"}
+              </div>
+            </td>
+
+            {/* Admission Type */}
+            <td className="px-4 py-1.5 align-top">
+              <div className="text-sm truncate">
+                {data?.admissionType?.name || "—"}
+              </div>
+            </td>
+
+            {/* Admission Session */}
+            <td className="px-4 py-1.5 align-top">
+              <div className="text-sm truncate">
+                {data?.admissionSession?.name || "—"}
+              </div>
+            </td>
+
+            {/* Fee */}
+            <td className="px-4 py-1.5 align-top text-sm font-semibold">
+              ₹ {fee}
+            </td>
+
+            {/* Status */}
+            <td className="px-4 py-1.5 align-top text-sm">
+              <span
+                className={`inline-block px-2 py-0.5 text-xs font-semibold rounded-full ${
+                  displayStatus === "Approved"
+                    ? "bg-green-100 text-green-800"
+                    : displayStatus === "Pending"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : displayStatus === "Rejected"
+                    ? "bg-red-100 text-red-800"
+                    : "bg-slate-100 text-slate-700"
+                }`}
+              >
+                {displayStatus}
+              </span>
+            </td>
+
+            {/* Action */}
+            <td className="px-4 py-1.5 align-top text-sm">
+              —
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
   );
 };
 

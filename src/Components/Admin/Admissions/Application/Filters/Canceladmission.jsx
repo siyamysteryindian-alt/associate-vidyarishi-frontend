@@ -146,6 +146,36 @@ const Canceladmission = ({
   const HandleViewPendencyOpen = () => setViewPendencyBooleanButton(true);
   const HandleViewPendencyClose = () => setViewPendencyBooleanButton(false);
 
+  const [viewCourierData, setViewCourierData] = useState(null);
+  const [viewCourierModal, setViewCourierModal] = useState(false);
+  const HandleViewCourier = (courier) => {
+    setViewCourierData(courier);
+    setViewCourierModal(true);
+  };
+
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [selectedCourierId, setSelectedCourierId] = useState(null);
+  const HandleMarkReceived = async (courierId) => {
+    try {
+      const confirm = window.confirm("Mark this courier as received?");
+
+      if (!confirm) return;
+
+      await axios.patch(
+        `${import.meta.env.VITE_BACKEND_URL}/mark-courier-received/${courierId}`,
+        {},
+        { withCredentials: true },
+      );
+
+      toast.success("Courier marked as received");
+
+      // refresh table
+      FetchAllStudentByPagination(AllStudentCurrentPage, AllStudentLimit);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update courier status");
+    }
+  };
   // ====== Helpers ======
 
   const ExtractDateFromDb = (submitFormDate) => {
@@ -168,10 +198,11 @@ const Canceladmission = ({
 
   const visibleStudents = AllStudentListData?.filter((StudentData) => {
     if (StudentData?.isDeleted) return false;
+
     if (StudentData?.university?._id !== UniversityGetDataFromRedux?.id)
       return false;
 
-    // Role-based access
+    // Role based filter
     if (
       ["Counsellor", "subCounsellor", "SubCenter"].includes(
         LoggedUserData?.role,
@@ -184,36 +215,8 @@ const Canceladmission = ({
       if (StudentData?.center?._id !== LoggedUserData?._id) return false;
     }
 
-    if (
-      ["operation-manager", "Accountant", "Admin"].includes(
-        LoggedUserData?.role,
-      )
-    ) {
-      if (StudentData?.university?._id !== UniversityGetDataFromRedux?.id)
-        return false;
-    }
-
-    // Pipeline conditions – only cancelled admissions
-    if (
-      StudentData?.status?.TrackStatus !== "4" ||
-      !StudentData?.status?.submitedFormDate ||
-      !StudentData?.status?.processedbyCenteron ||
-      !StudentData?.status?.processedtoUniversityon ||
-      !StudentData?.status?.admissionCancelDate?.trim()
-    ) {
-      return false;
-    }
-
-    // Docs validation (same as original)
-    const hasValidDocs =
-      Documents.filter(
-        (studentDoc) =>
-          studentDoc.isPendency === false &&
-          studentDoc.isApproved === true &&
-          studentDoc.isApprovedDate !== "",
-      ).length > 0;
-
-    if (!hasValidDocs) return false;
+    // 🔴 IMPORTANT: only check cancel date
+    if (!StudentData?.status?.admissionCancelDate) return false;
 
     return true;
   });
@@ -664,7 +667,44 @@ const Canceladmission = ({
                     </div>
                   </td>
                 )}
-                
+
+                <td className="text-center">
+                  {ReduxUser.role === "center" && (
+                    <div className="flex justify-center gap-2">
+                      {StudentData?.Courier && (
+                        <>
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                            onClick={() =>
+                              HandleViewCourier(StudentData?.Courier)
+                            }
+                          >
+                            View
+                          </button>
+
+                          {!StudentData?.Courier?.Received && (
+                            <button
+                              className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                              onClick={() => {
+                                setSelectedCourierId(StudentData?.Courier?._id);
+                                setConfirmModal(true);
+                              }}
+                            >
+                              Mark Received
+                            </button>
+                          )}
+
+                          {StudentData?.Courier?.Received && (
+                            <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                              Received
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
+                </td>
+
                 {/* Courier Status for Admin */}
                 {ReduxUser?.role === "Admin" && (
                   <td className="px-4 w-48 py-2 align-center">

@@ -6,6 +6,8 @@ import useLeads from "../../CustomHooks/Leads/useLeads";
 import ActivityModal from "./Activity/ShowActivity";
 import ProspRegModal from "./ProspReg/ProspRegModal";
 import { useDispatch, useSelector } from "react-redux";
+import { saveAs } from "file-saver";
+import { HiDownload } from "react-icons/hi";
 
 const ShowLead = () => {
   const {
@@ -23,6 +25,7 @@ const ShowLead = () => {
 
   const [activityOpen, setActivityOpen] = useState(false);
   const [prospRegOpen, setProspRegOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const LoggedUser = useSelector((state) => state.user);
 
@@ -31,6 +34,74 @@ const ShowLead = () => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-GB");
   };
+
+  const handleDownloadLeads = () => {
+    try {
+      const headers = [
+        "Sr No",
+        "Name",
+        "Email",
+        "Mobile",
+        "Program Level",
+        "Course",
+        "Specialization",
+        "DOB",
+        "State",
+        "District",
+        "Student ID",
+        "Lead Owner",
+        "Source",
+        "RM",
+        "Created On",
+        "Status",
+      ];
+
+      const rows = filteredLeads.map((lead, index) => [
+        index + 1,
+        `${lead.FirstName || ""} ${lead.LastName || ""}`,
+        lead.EmailAddress || "",
+        lead.Phone || "",
+        lead.Program_Level || "",
+        lead.Program?.name || "",
+        lead.SubCourse?.name || "",
+        lead.DateOfBirth || "",
+        lead.State || "",
+        lead.District || "",
+        lead.StudentId || "",
+        lead.whoCreated?.name || "",
+        lead.Source || "",
+        lead.ReportingManager?.name || "",
+        new Date(lead.createdAt).toLocaleString(),
+        lead.status || "",
+      ]);
+
+      const csvContent = [headers, ...rows]
+        .map((row) => row.map((item) => `"${item}"`).join(","))
+        .join("\n");
+      const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
+
+      saveAs(blob, "Leads_Data.csv");
+    } catch (error) {
+      console.error("Download error:", error);
+    }
+  };
+
+  const filteredLeads = leads.filter((lead) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      `${lead.FirstName} ${lead.LastName}`.toLowerCase().includes(search) ||
+      lead.whoCreated?.code?.toLowerCase().includes(search) || // ✅ NEW
+      lead.whoCreated?.name?.toLowerCase().includes(search) || // optional
+      lead.EmailAddress?.toLowerCase().includes(search) ||
+      lead.Phone?.toLowerCase().includes(search)
+      // ||
+      // lead.State?.toLowerCase().includes(search) ||
+      // lead.District?.toLowerCase().includes(search)
+    );
+  });
 
   return (
     <section className="mt-2 mx-2 rounded-xl">
@@ -47,7 +118,27 @@ const ShowLead = () => {
           Leads
         </h2>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
+          <div className="relative w-[25rem]">
+            <input
+              type="text"
+              // placeholder="Search by Name, Email, Mobile, State or District"
+              placeholder="Search by Name, Email, Mobile or Lead owner"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-4 py-2 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+            {/* Clear Button */}
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-lg"
+              >
+                ❌
+              </button>
+            )}
+          </div>
           <NavLink
             to={`/${LoggedUser.role}/lead-generate`}
             className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 shadow-sm transition"
@@ -55,8 +146,12 @@ const ShowLead = () => {
             + Add Lead
           </NavLink>
 
-          <button className="bg-gray-200 text-gray-800 px-5 py-2 rounded-lg hover:bg-gray-300 shadow-sm transition">
-            Download
+          <button
+            onClick={handleDownloadLeads}
+            className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-sm transition flex items-center gap-2"
+          >
+            <HiDownload size={16} />
+            <span className="hidden sm:inline">Download</span>
           </button>
         </div>
       </div>
@@ -79,14 +174,16 @@ const ShowLead = () => {
                   "Status",
                   "Created On",
                   "Name",
-                  "Mobile",
                   "Email",
+                  "Mobile",
+                  "Program Level",
                   "Course",
                   "Specialization",
-                  "Program Level",
+                  "DOB",
+                  "State",
+                  "District",
                   "Student ID",
                   "Lead Owner",
-                  "DOB",
                   "Source",
                   "RM",
                 ].map((head) => (
@@ -101,12 +198,12 @@ const ShowLead = () => {
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
               {loading ? (
                 <tr>
-                  <td colSpan="14" className="text-center py-10 text-gray-600">
+                  <td colSpan="16" className="text-center py-10 text-gray-600">
                     Loading...
                   </td>
                 </tr>
-              ) : leads.length > 0 ? (
-                leads.map((lead) => (
+              ) : filteredLeads.length > 0 ? (
+                filteredLeads.map((lead) => (
                   <tr
                     key={lead._id}
                     className="hover:bg-gray-50 dark:hover:bg-gray-800 transition"
@@ -128,10 +225,10 @@ const ShowLead = () => {
                           lead.status === "Done"
                             ? "bg-green-100 text-green-700"
                             : lead.status === "Prosp/Reg"
-                            ? "bg-blue-100 text-blue-700"
-                            : lead.status === "Admission"
-                            ? "bg-pink-100 text-pink-700"
-                            : "bg-gray-100 text-gray-700"
+                              ? "bg-blue-100 text-blue-700"
+                              : lead.status === "Admission"
+                                ? "bg-pink-100 text-pink-700"
+                                : "bg-gray-100 text-gray-700"
                         }`}
                       >
                         {lead.status === "Prosp/Reg" ? (
@@ -156,11 +253,15 @@ const ShowLead = () => {
                     </td>
 
                     <td className="px-4 py-3 whitespace-nowrap">
+                      {lead.EmailAddress}
+                    </td>
+
+                    <td className="px-4 py-3 whitespace-nowrap">
                       {lead.Phone}
                     </td>
 
                     <td className="px-4 py-3 whitespace-nowrap">
-                      {lead.EmailAddress}
+                      {lead.Program_Level || "-"}
                     </td>
 
                     <td className="px-4 py-3 whitespace-nowrap">
@@ -171,12 +272,20 @@ const ShowLead = () => {
                       {lead.SubCourse?.name || "-"}
                     </td>
 
+                    <td className="px-4 py-3  whitespace-nowrap">
+                      {formatDate(lead.DateOfBirth)}
+                    </td>
+
                     <td className="px-4 py-3 whitespace-nowrap">
-                      {lead.Program_Level || "-"}
+                      {lead.State || "-"}
+                    </td>
+
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {lead.District || "-"}
                     </td>
 
                     {/* Student ID with external link */}
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    {/* <td className="px-4 py-3 whitespace-nowrap">
                       <a
                         href="https://application.amityonline.com/admission/home/signIn"
                         target="_blank"
@@ -186,14 +295,30 @@ const ShowLead = () => {
                         {lead.StudentId}
                         <HiOutlineExternalLink size={14} />
                       </a>
+                    </td> */}
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {lead.isUniversityAPIHit ? (
+                        <a
+                          href="https://application.amityonline.com/admission/home/signIn"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-blue-600 hover:underline inline-flex items-center gap-1"
+                        >
+                          {lead.StudentId}
+                          <HiOutlineExternalLink size={14} />
+                        </a>
+                      ) : (
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {lead.StudentId}
+                        </span>
+                      )}
                     </td>
 
                     <td className="px-4 py-3  whitespace-nowrap">
-                      {lead.whoCreated?.name || "-"}
-                    </td>
-
-                    <td className="px-4 py-3  whitespace-nowrap">
-                      {formatDate(lead.DateOfBirth)}
+                      {/* {lead.whoCreated?.name || "-"} */}
+                      {lead.whoCreated
+                        ? `${lead.whoCreated.code || "N/A"} (${lead.whoCreated.name || "-"})`
+                        : "-"}
                     </td>
 
                     <td className="px-4 py-3  whitespace-nowrap">
@@ -208,7 +333,7 @@ const ShowLead = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan="14"
+                    colSpan="16"
                     className="text-center py-10 text-gray-500 dark:text-gray-300 font-medium"
                   >
                     No Leads Found

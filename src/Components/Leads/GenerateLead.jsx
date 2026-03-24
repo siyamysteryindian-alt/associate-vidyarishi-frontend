@@ -32,6 +32,7 @@ const GenerateLead = ({
   const { GetAllProgramsByPagination, AllProgramsByPagination } =
     UseGetProgramPagination();
 
+  const [isApiUsed, setIsApiUsed] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -94,14 +95,14 @@ const GenerateLead = ({
             ReduxUser?.role === "center"
               ? "Center"
               : ReduxUser?.role === "subCenter"
-              ? "SubCenter"
-              : ReduxUser?.role === "subCounsellor"
-              ? "SubCounsellor"
-              : ReduxUser?.role,
+                ? "SubCenter"
+                : ReduxUser?.role === "subCounsellor"
+                  ? "SubCounsellor"
+                  : ReduxUser?.role,
           whoCreated: ReduxUser?.id,
           State: form.state,
           District: form.district,
-        }
+        },
       );
 
       if (response.data.save === true) {
@@ -109,6 +110,7 @@ const GenerateLead = ({
         setTimeout(() => {
           setStudentLoader(false);
           setShowStudentId(response.data.data.StudentId);
+          setIsApiUsed(response.data.universityApiUsed);
           setIsModalOpen(true);
           refetchLeads();
         }, 1000);
@@ -268,7 +270,7 @@ const GenerateLead = ({
                   {AllProgramsByPagination?.filter(
                     (data) =>
                       data?.university?._id === ReduxSelectedUniversity?.id &&
-                      !data?.isDeleted
+                      !data?.isDeleted,
                   ).map((data, i) => (
                     <option key={i} value={data?._id}>
                       {data?.name}
@@ -296,7 +298,7 @@ const GenerateLead = ({
                     (data) =>
                       data?.university?._id === ReduxSelectedUniversity?.id &&
                       data?.Program?._id === form.course &&
-                      !data?.isDeleted
+                      !data?.isDeleted,
                   ).map((data, i) => (
                     <option key={i} value={data?._id}>
                       {data?.name}
@@ -342,7 +344,12 @@ const GenerateLead = ({
       {StudentLoader && <FullPageLoader />}
 
       {isModalOpen && (
-        <ShowStudentIdModal onClose={handleModalClose} Show={ShowStudentId} />
+        // <ShowStudentIdModal onClose={handleModalClose} Show={ShowStudentId} />
+        <ShowStudentIdModal
+          onClose={handleModalClose}
+          Show={ShowStudentId}
+          isApiUsed={isApiUsed}
+        />
       )}
     </>
   );

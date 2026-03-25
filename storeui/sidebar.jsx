@@ -613,7 +613,7 @@ const Sidebar = () => {
                                   }
                                 >
                                   <RiArrowDropRightFill size={18} />
-                                  Prosp/Reg
+                                    Show All Leads
                                 </NavLink>
                               </li>
                             </ul>
@@ -1018,7 +1018,7 @@ const Sidebar = () => {
                                   }
                                 >
                                   <RiArrowDropRightFill size={18} />
-                                  Prosp/Reg
+                                    Show All Leads
                                 </NavLink>
                               </li>
                             </ul>
@@ -1384,7 +1384,7 @@ const Sidebar = () => {
                                   }
                                 >
                                   <RiArrowDropRightFill size={18} />
-                                  Prosp/Reg
+                                    Show All Leads
                                 </NavLink>
                               </li>
                             </ul>
@@ -1782,7 +1782,7 @@ const Sidebar = () => {
                                 }
                               >
                                 <RiArrowDropRightFill size={18} />
-                                Prosp/Reg
+                                  Show All Leads
                               </NavLink>
                             </li>
                           </ul>
@@ -2081,7 +2081,7 @@ const Sidebar = () => {
                                   }
                                 >
                                   <RiArrowDropRightFill size={18} />
-                                  Prosp/Reg
+                                    Show All Leads
                                 </NavLink>
                               </li>
                             </ul>
@@ -2373,7 +2373,7 @@ const Sidebar = () => {
                                   }
                                 >
                                   <RiArrowDropRightFill size={18} />
-                                  Prosp/Reg
+                                    Show All Leads
                                 </NavLink>
                               </li>
                             </ul>
@@ -2626,7 +2626,7 @@ const Sidebar = () => {
                                 }
                               >
                                 <RiArrowDropRightFill size={18} />
-                                Prosp/Reg
+                                  Show All Leads
                               </NavLink>
                             </li>
                           </ul>
@@ -3105,7 +3105,7 @@ const Sidebar = () => {
                                   }
                                 >
                                   <RiArrowDropRightFill size={18} />
-                                  Prosp/Reg
+                                    Show All Leads
                                 </NavLink>
                               </li>
                             </ul>

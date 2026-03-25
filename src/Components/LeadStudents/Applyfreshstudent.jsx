@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import StudentApplicationForm from "./Components/LeadStudentApplicationForm";
 import StudentIdModal from "./Components/GetStudentIdModal";
+import axios from "axios";
 
 const Applyfreshstudent = () => {
   const [studentId, setStudentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [studentData, setStudentData] = useState(null);
 
   const LoggedUser = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -23,25 +25,49 @@ const Applyfreshstudent = () => {
     }
   };
 
+  // const handleFormSubmit = async (enteredStudentId) => {
+  //   setIsLoading(true);
+
+  //   try {
+  //     // Simulate API call: replace this with actual call later
+  //     console.log("Checking student ID:", enteredStudentId);
+  //     await new Promise((resolve) => setTimeout(resolve, 1200)); // fake delay
+
+  //     const isValidId = enteredStudentId && enteredStudentId.length >= 4; // Example validation
+
+  //     if (isValidId) {
+  //       setStudentId(enteredStudentId);
+  //       setIsModalOpen(false);
+  //     } else {
+  //       alert("Invalid Student ID. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error validating student ID:", error);
+  //     alert("Something went wrong. Please try again.");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   const handleFormSubmit = async (enteredStudentId) => {
     setIsLoading(true);
 
     try {
-      // Simulate API call: replace this with actual call later
-      console.log("Checking student ID:", enteredStudentId);
-      await new Promise((resolve) => setTimeout(resolve, 1200)); // fake delay
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/get-student-by-id/${enteredStudentId}`,
+      );
 
-      const isValidId = enteredStudentId && enteredStudentId.length >= 4; // Example validation
-
-      if (isValidId) {
+      if (response.data.success) {
         setStudentId(enteredStudentId);
+
+        // 👇 store fetched data
+        setStudentData(response.data.data);
+
         setIsModalOpen(false);
       } else {
-        alert("Invalid Student ID. Please try again.");
+        alert("User not found");
       }
     } catch (error) {
-      console.error("Error validating student ID:", error);
-      alert("Something went wrong. Please try again.");
+      alert("User not found");
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +95,11 @@ const Applyfreshstudent = () => {
           )}
 
           {!isModalOpen && studentId ? (
-            <StudentApplicationForm studentId={studentId} />
+            // <StudentApplicationForm studentId={studentId} />
+            <StudentApplicationForm
+              studentId={studentId}
+              studentData={studentData}
+            />
           ) : null}
         </>
       )}

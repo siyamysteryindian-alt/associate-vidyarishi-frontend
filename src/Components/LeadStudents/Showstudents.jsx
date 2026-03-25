@@ -4,8 +4,7 @@ import { NavLink } from "react-router-dom";
 import ActivityModal from "../Leads/Activity/ShowActivity";
 import ProspRegModal from "../Leads/ProspReg/ProspRegModal";
 
-const leads = [
-];
+const leads = [];
 
 const Showstudents = () => {
   const [ActivityOpen, setActivityOpen] = useState(false);
@@ -29,7 +28,8 @@ const Showstudents = () => {
           </div> */}
         </div>
 
-        <div className="overflow-x-auto max-w-screen-lg bg-white shadow rounded">
+        {/* <div className="overflow-x-auto max-w-screen-lg bg-white shadow rounded"> */}
+        <div className="overflow-x-auto bg-white shadow rounded">
           <div className="w-full ">
             <table className=" text-sm text-gray-800">
               <thead className="bg-gray-100">
@@ -38,7 +38,9 @@ const Showstudents = () => {
                   <th className="px-4 py-3 text-left w-full">Status</th>
                   <th className="px-4 py-3 text-left w-full">Created On</th>
 
-                  <th className="px-4 py-3 text-left w-full">Prosp/Reg Date</th>
+                  <th className="px-4 py-3 text-left w-full">
+                    Show All Leads Date
+                  </th>
                   <th className="px-4 py-3 text-left w-full">Name</th>
                   <th className="px-4 py-3 text-left w-full">Mobile</th>
 
@@ -69,9 +71,9 @@ const Showstudents = () => {
                         className={`px-2 py-1 rounded text-xs font-medium ${
                           lead.status === "Done"
                             ? "bg-green-100 text-green-700"
-                            : lead.status === "Prosp/Reg"
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-gray-100 text-gray-700"
+                            : lead.status === "ShowAllLeads"
+                              ? "bg-blue-100 text-blue-700"
+                              : "bg-gray-100 text-gray-700"
                         }`}
                       >
                         {lead.status}
@@ -99,7 +101,9 @@ const Showstudents = () => {
                       {lead.specialization}
                     </td>
 
-                    <td className="px-4 py-2 truncate max-w-xs">{lead.StudentId}</td>
+                    <td className="px-4 py-2 truncate max-w-xs">
+                      {lead.StudentId}
+                    </td>
                     <td className="px-4 py-2 truncate max-w-xs">
                       {lead.partner}
                     </td>

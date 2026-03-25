@@ -5,7 +5,8 @@ import UseGetProgramPagination from "../../../CustomHooks/UseGetProgramPaginatio
 import UseGetSpecialization from "../../../CustomHooks/UseGetSpecialization";
 import useGetProgramType from "../../../CustomHooks/UseGetProgramType";
 
-const StudentApplicationForm = () => {
+// const StudentApplicationForm = () => {
+const StudentApplicationForm = ({ studentId, studentData }) => {
   const ReduxSelectedUniversity = useSelector((state) => state.university);
   const { GetAdmissionSession, AdmissionSession } = UseGetAdmissionSession();
   const { GetAdmissionType, AdmissionType } = useGetProgramType();
@@ -13,6 +14,20 @@ const StudentApplicationForm = () => {
     UseGetProgramPagination();
   const { GetSpecializationByProgramId, SpecializationByProgramId } =
     UseGetSpecialization();
+
+  useEffect(() => {
+    if (studentData) {
+      setForm((prev) => ({
+        ...prev,
+        studentName: `${studentData.FirstName} ${studentData.LastName}`,
+        email: studentData.EmailAddress,
+        whatsapp: studentData.Phone,
+        dob: studentData.DateOfBirth
+          ? new Date(studentData.DateOfBirth).toISOString().split("T")[0]
+          : "",
+      }));
+    }
+  }, [studentData]);
 
   const [form, setForm] = useState({
     admissionSession: "",
@@ -77,7 +92,7 @@ const StudentApplicationForm = () => {
               value={form.admissionSession}
               onChange={handleChange}
               options={AdmissionSession?.filter(
-                (a) => a?.university?._id === ReduxSelectedUniversity?.id
+                (a) => a?.university?._id === ReduxSelectedUniversity?.id,
               )}
               optionLabel="name"
             />
@@ -95,7 +110,7 @@ const StudentApplicationForm = () => {
               value={form.course}
               onChange={handleChange}
               options={AllProgramsByPagination?.filter(
-                (p) => p?.university?._id === ReduxSelectedUniversity?.id
+                (p) => p?.university?._id === ReduxSelectedUniversity?.id,
               )}
               optionLabel="name"
             />

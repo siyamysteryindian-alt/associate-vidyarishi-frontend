@@ -40,7 +40,7 @@ const Sidebar = () => {
         {},
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (Response?.data?.success) {
@@ -54,7 +54,7 @@ const Sidebar = () => {
             vertical: "",
             creatorType: "",
             whoCreated: "",
-          })
+          }),
         );
         NavigateTo("/");
       } else {
@@ -63,7 +63,8 @@ const Sidebar = () => {
     } catch (error) {
       console.log(error);
       toast.error(
-        error?.response?.data?.message || "An error occurred. Please try again."
+        error?.response?.data?.message ||
+          "An error occurred. Please try again.",
       );
     }
   };
@@ -581,7 +582,7 @@ const Sidebar = () => {
 
   // Better variable name than "id"
   const blockedUniversities = universities.filter(
-    (uni) => uni.vertical?.trim(" ") === "Distance"
+    (uni) => uni.vertical?.trim(" ") === "Distance",
   );
 
   const isBlocked =
@@ -694,7 +695,7 @@ const Sidebar = () => {
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
-                              Prosp/Reg
+                              Show All Leads
                             </NavLink>
                           </li>
                         </ul>
@@ -1144,7 +1145,7 @@ const Sidebar = () => {
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
-                              Prosp/Reg
+                              Show All Leads
                             </NavLink>
                           </li>
                         </ul>
@@ -1577,7 +1578,7 @@ const Sidebar = () => {
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
-                              Prosp/Reg
+                              Show All Leads
                             </NavLink>
                           </li>
                         </ul>
@@ -2047,7 +2048,7 @@ const Sidebar = () => {
                             className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <RiArrowDropRightFill size={16} />
-                            Prosp/Reg
+                            Show All Leads
                           </NavLink>
                         </li>
                       </ul>
@@ -2399,7 +2400,7 @@ const Sidebar = () => {
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
-                              Prosp/Reg
+                              Show All Leads
                             </NavLink>
                           </li>
                         </ul>
@@ -2744,7 +2745,7 @@ const Sidebar = () => {
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
-                              Prosp/Reg
+                              Show All Leads
                             </NavLink>
                           </li>
                         </ul>
@@ -3044,7 +3045,7 @@ const Sidebar = () => {
                             className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <RiArrowDropRightFill size={16} />
-                            Prosp/Reg
+                            Show All Leads
                           </NavLink>
                         </li>
                       </ul>
@@ -3595,7 +3596,7 @@ const Sidebar = () => {
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
-                              Prosp/Reg
+                              Show All Leads
                             </NavLink>
                           </li>
                         </ul>

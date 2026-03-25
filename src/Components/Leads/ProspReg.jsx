@@ -20,7 +20,7 @@ const ProspReg = () => {
           }}
         >
           <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">
-            Prospectus / Registration Leads
+            All Leads
           </h2>
         </div>
 
@@ -38,10 +38,11 @@ const ProspReg = () => {
               <thead className="sticky top-0 bg-gray-100 dark:bg-gray-800 z-10 shadow-sm">
                 <tr className="text-xs uppercase text-gray-600 dark:text-gray-300 tracking-wide">
                   {[
+                    "University",
                     "Activity",
                     "Status",
                     "Created On",
-                    "Prosp/Reg Date",
+                    "Show All Leads Date",
                     "Name",
                     "Mobile",
                     "Email",
@@ -87,6 +88,11 @@ const ProspReg = () => {
                         >
                           <TbCalendarWeek size={22} />
                         </button>
+                      </td>
+
+                      {/* University */}
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {lead.university?.name || "-"}
                       </td>
 
                       <td className="px-4 py-3">

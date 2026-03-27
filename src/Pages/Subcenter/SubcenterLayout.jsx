@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../Components/Admin/Sidebar";
 import { IoCloseSharp } from "react-icons/io5";
-import Mainlogo from "../../../public/logo.png";
+import Mainlogo from "../../../public/logo.jpg";
 import { BiLogOut } from "react-icons/bi";
 import Togglebtn from "../../Common/ToggleDarkMode";
 import toast, { Toaster } from "react-hot-toast";

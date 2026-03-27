@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 
-const StudentIdModal = ({ isOpen, onClose, onSubmit }) => {
-  const [inputValue, setInputValue] = useState("");
+const StudentIdModal = ({ isOpen, onClose, onSubmit, defaultStudentId }) => {
+  const [inputValue, setInputValue] = useState(defaultStudentId || "");
+
+  useEffect(() => {
+    if (defaultStudentId) {
+      setInputValue(defaultStudentId);
+    }
+  }, [defaultStudentId]);
 
   if (!isOpen) return null;
 

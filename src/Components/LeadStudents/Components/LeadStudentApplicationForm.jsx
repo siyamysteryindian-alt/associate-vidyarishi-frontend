@@ -8,7 +8,8 @@ import useGetProgramType from "../../../CustomHooks/UseGetProgramType";
 // const StudentApplicationForm = () => {
 const StudentApplicationForm = ({ studentId, studentData }) => {
   const ReduxSelectedUniversity = useSelector((state) => state.university);
-  const { GetAdmissionSession, AdmissionSession } = UseGetAdmissionSession();
+  const { GetAdmissionSession, AdmissionsessionListData } =
+    UseGetAdmissionSession();
   const { GetAdmissionType, AdmissionType } = useGetProgramType();
   const { GetAllProgramsByPagination, AllProgramsByPagination } =
     UseGetProgramPagination();
@@ -25,6 +26,9 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
         dob: studentData.DateOfBirth
           ? new Date(studentData.DateOfBirth).toISOString().split("T")[0]
           : "",
+        // ✅ NEW
+        course: studentData.Program || "",
+        specialization: studentData.SubCourse || "",
       }));
     }
   }, [studentData]);
@@ -91,8 +95,10 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
               name="admissionSession"
               value={form.admissionSession}
               onChange={handleChange}
-              options={AdmissionSession?.filter(
-                (a) => a?.university?._id === ReduxSelectedUniversity?.id,
+              options={AdmissionsessionListData?.filter(
+                (a) =>
+                  a?.university === ReduxSelectedUniversity?.id &&
+                  a?.isAvailable,
               )}
               optionLabel="name"
             />
@@ -113,6 +119,7 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
                 (p) => p?.university?._id === ReduxSelectedUniversity?.id,
               )}
               optionLabel="name"
+              disabled={!!studentData}
             />
           </div>
 
@@ -124,18 +131,14 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
               onChange={handleChange}
               options={SpecializationByProgramId?.filter((s) => !s?.isDeleted)}
               optionLabel="name"
+              disabled={!!studentData}
             />
             <FormSelect
               label="Semester *"
               name="semester"
               value={form.semester}
               onChange={handleChange}
-              options={[
-                { _id: "1", name: "1" },
-                { _id: "2", name: "2" },
-                { _id: "3", name: "3" },
-                { _id: "4", name: "4" },
-              ]}
+              options={[{ _id: "1", name: "1" }]}
               optionLabel="name"
             />
             <FormField
@@ -144,6 +147,7 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
               type="date"
               value={form.dob}
               onChange={handleChange}
+              disabled={!!studentData}
             />
           </div>
 
@@ -153,6 +157,7 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
               name="studentName"
               value={form.studentName}
               onChange={handleChange}
+              disabled={!!studentData}
             />
             <FormField
               label="Email *"
@@ -160,12 +165,14 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
               type="email"
               value={form.email}
               onChange={handleChange}
+              disabled={!!studentData}
             />
             <FormField
               label="WhatsApp Number *"
               name="whatsapp"
               value={form.whatsapp}
               onChange={handleChange}
+              disabled={!!studentData}
             />
           </div>
 
@@ -253,6 +260,7 @@ const FormField = ({
   onChange,
   type = "text",
   placeholder,
+  disabled = false,
 }) => (
   <div>
     {label && (
@@ -266,6 +274,7 @@ const FormField = ({
       value={value}
       placeholder={placeholder}
       onChange={onChange}
+      disabled={disabled}
       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
     />
   </div>
@@ -279,6 +288,7 @@ const FormSelect = ({
   options = [],
   optionLabel = "name",
   placeholder = "Select",
+  disabled = false,
 }) => (
   <div>
     {label && (
@@ -290,6 +300,7 @@ const FormSelect = ({
       name={name}
       value={value}
       onChange={onChange}
+      disabled={disabled}
       className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
     >
       <option value="">{placeholder}</option>

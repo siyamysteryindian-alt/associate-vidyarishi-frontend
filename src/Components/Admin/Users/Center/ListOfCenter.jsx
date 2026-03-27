@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash, FaWhatsapp } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import image from "../../../../../public/logo.png";
+import image from "../../../../../public/logo.jpg";
 import { IoChevronBack, IoChevronForwardOutline } from "react-icons/io5";
 import { FaCirclePlus } from "react-icons/fa6";
 import Loader from "../../../../Helper/Loader";

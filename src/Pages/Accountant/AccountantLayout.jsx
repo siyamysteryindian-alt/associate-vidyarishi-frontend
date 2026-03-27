@@ -12,7 +12,7 @@ import DisplayWindowNotify from "../DisplayWindowNotify";
 import UseNotifyData from "../../CustomHooks/Notify/UseNotify";
 import UseGetLoggedUser from "../../CustomHooks/UseGetLoggedUser";
 import useGetUniversity from "../../CustomHooks/UseGetUniversities";
-import Mainlogo from "../../../public/logo.png";
+import Mainlogo from "../../../public/logo.jpg";
 import "../../App.css";
 
 /* Skeleton helpers */

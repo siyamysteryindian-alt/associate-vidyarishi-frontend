@@ -3,7 +3,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Logo from "../../public/logo.png";
+import Logo from "../../public/logo.jpg";
 
 const Login = () => {
   const [showPass, setShowPass] = useState(false);

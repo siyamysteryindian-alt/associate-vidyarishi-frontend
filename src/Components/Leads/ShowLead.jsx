@@ -249,12 +249,13 @@ const ShowLead = () => {
                             {lead.status}
                           </button>
                         ) : lead.status === "Admission" ? (
-                          <Link
-                            to={`/${LoggedUser.role}/lead-application-form`}
-                            className="hover:underline text-pink-700 font-semibold"
-                          >
-                            Apply Admission
-                          </Link>
+                        <Link
+  to={`/${LoggedUser.role}/lead-application-form`}
+  state={{ studentId: lead.StudentId }}
+  className="hover:underline text-pink-700 font-semibold"
+>
+  Apply Admission
+</Link>
                         ) : (
                           lead.status
                         )}

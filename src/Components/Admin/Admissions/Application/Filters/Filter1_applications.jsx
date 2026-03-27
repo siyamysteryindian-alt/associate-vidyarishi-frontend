@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
- import image from "../../../../../../public/logo.png";
+ import image from "../../../../../../public/logo.jpg";
 import { BsFillPrinterFill } from "react-icons/bs";
 import { FaDownload } from "react-icons/fa";
 import { RiEditLine, RiMailSendFill } from "react-icons/ri";

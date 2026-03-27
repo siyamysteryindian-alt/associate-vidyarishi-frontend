@@ -116,6 +116,12 @@ const ListOfAdmissionsession = ({
 
   const UniversityGetDataFromRedux = useSelector((state) => state.university);
 
+  const filteredData = AdmissionsessionListData?.filter(
+    (data) =>
+      String(data?.university) === String(UniversityGetDataFromRedux?.id) &&
+      !data?.isDeleted,
+  );
+
   return (
     <>
       <div className="py-2.5 px-4">
@@ -186,124 +192,91 @@ const ListOfAdmissionsession = ({
             </thead>
             <tbody>
               {AdmissionsessionLoading ? (
-                <div className="absolute">
-                  <div className="flex justify-center items-center h-[60vh] w-[135vh] relative top-0 left-0">
+                <tr>
+                  <td colSpan="8" className="text-center">
                     <Loader />
-                  </div>
-                </div>
-              ) : AdmissionsessionListData?.length > 0 ? (
-                <>
-                  {AdmissionsessionListData.map((data, i) =>
-                    data.university === UniversityGetDataFromRedux?.id &&
-                    !data?.isDeleted ? (
-                      <tr key={i} className="">
-                        <td className="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {data?.name}
-                        </td>
-                        <td className="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {data?.examSession}
-                        </td>
-                        <td className="px-4 py-2 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {data?.scheme?.name}
-                        </td>
-                        <td className="px-4 py-2">
-                          <div className="w-[15vh] flex gap-y-1 flex-row">
-                            <ToggleButton
-                              ClickYes={() =>
-                                HandleToggle(data._id, "isAvailable", true)
-                              }
-                              ClickNo={() =>
-                                HandleToggle(data._id, "isAvailable", false)
-                              }
-                              StateUpdate={data?.isAvailable}
-                            />
-                            {data?.isAvailable ? "Yes" : "No"}
-                          </div>
-                        </td>
-                        <td className="px-4 py-2">
-                          <div className="w-[15vh] flex gap-y-1 flex-row">
-                            <ToggleButton
-                              ClickYes={() =>
-                                HandleToggle(data._id, "isCurrent", true)
-                              }
-                              ClickNo={() =>
-                                HandleToggle(data._id, "isCurrent", false)
-                              }
-                              StateUpdate={data?.isCurrent}
-                            />
-                            {data?.isCurrent ? "Yes" : "No"}
-                          </div>
-                        </td>
-                        <td className="px-4 py-2">
-                          <div className="w-[15vh] flex gap-y-1 flex-row">
-                            <ToggleButton
-                              ClickYes={() =>
-                                HandleToggle(data._id, "isLEStatus", true)
-                              }
-                              ClickNo={() =>
-                                HandleToggle(data._id, "isLEStatus", false)
-                              }
-                              StateUpdate={data?.isLEStatus}
-                            />
-                            {data?.isLEStatus ? "Yes" : "No"}
-                          </div>
-                        </td>
-                        <td className="px-4 py-2">
-                          <div className="w-[15vh] flex gap-y-1 flex-row">
-                            <ToggleButton
-                              ClickYes={() =>
-                                HandleToggle(data._id, "isCTStatus", true)
-                              }
-                              ClickNo={() =>
-                                HandleToggle(data._id, "isCTStatus", false)
-                              }
-                              StateUpdate={data?.isCTStatus}
-                            />
-                            {data?.isCTStatus ? "Yes" : "No"}
-                          </div>
-                        </td>
-                        <td className="px-4 py-2 flex gap-2">
-                          <button
-                            onClick={() => {
-                              HandleOpenUpdateAdmissionsession();
-                              setEditUpdateAdmissionsession(data);
-                            }}
-                            className="text-base text-green-600 dark:text-green-500 hover:underline"
-                          >
-                            <AiTwotoneEdit size={20} />
-                          </button>
-                          <button
-                            onClick={() => HandleDeleteAdmissionsession(data)}
-                            className="text-base text-red-600 dark:text-red-500 hover:underline"
-                          >
-                            <MdDelete size={20} />
-                          </button>
-                        </td>
-                      </tr>
-                    ) : (
-                      <div className="absolute">
-                        <div className="flex justify-center items-center h-[60vh] w-[120vh] relative top-0 left-0">
-                          Not Created ANY Data Inside This University
-                        </div>
-                      </div>
-                    ),
-                  )}
-                </>
-              ) : UniversityGetDataFromRedux?.id === "" ? (
-                <div className="absolute">
-                  <div className="flex justify-center items-center h-[60vh] w-[120vh] relative top-0 left-0">
-                    Select The University
-                  </div>
-                </div>
-              ) : (
-                <div className="absolute">
-                  <div className="flex justify-center items-center h-[60vh] w-[120vh] relative top-0 left-0">
-                    Not Created ANY Data Inside This University
-                  </div>
-                </div>
-              )}
+                  </td>
+                </tr>
+              ) : filteredData?.length > 0 ? (
+                filteredData.map((data, i) => (
+                  <tr key={i}>
+                    <td className="px-4 py-2">{data?.name}</td>
+                    <td className="px-4 py-2">{data?.examSession}</td>
+                    <td className="px-4 py-2">{data?.scheme?.name}</td>
 
-              {/* <!-- Additional rows here --> */}
+                    <td className="px-4 py-2">
+                      <ToggleButton
+                        ClickYes={() =>
+                          HandleToggle(data._id, "isAvailable", true)
+                        }
+                        ClickNo={() =>
+                          HandleToggle(data._id, "isAvailable", false)
+                        }
+                        StateUpdate={data?.isAvailable}
+                      />
+                    </td>
+
+                    <td className="px-4 py-2">
+                      <ToggleButton
+                        ClickYes={() =>
+                          HandleToggle(data._id, "isCurrent", true)
+                        }
+                        ClickNo={() =>
+                          HandleToggle(data._id, "isCurrent", false)
+                        }
+                        StateUpdate={data?.isCurrent}
+                      />
+                    </td>
+
+                    <td className="px-4 py-2">
+                      <ToggleButton
+                        ClickYes={() =>
+                          HandleToggle(data._id, "isLEStatus", true)
+                        }
+                        ClickNo={() =>
+                          HandleToggle(data._id, "isLEStatus", false)
+                        }
+                        StateUpdate={data?.isLEStatus}
+                      />
+                    </td>
+
+                    <td className="px-4 py-2">
+                      <ToggleButton
+                        ClickYes={() =>
+                          HandleToggle(data._id, "isCTStatus", true)
+                        }
+                        ClickNo={() =>
+                          HandleToggle(data._id, "isCTStatus", false)
+                        }
+                        StateUpdate={data?.isCTStatus}
+                      />
+                    </td>
+
+                    <td className="px-4 py-2 flex gap-2">
+                      <button
+                        onClick={() => {
+                          HandleOpenUpdateAdmissionsession();
+                          setEditUpdateAdmissionsession(data);
+                        }}
+                      >
+                        <AiTwotoneEdit size={20} />
+                      </button>
+
+                      <button
+                        onClick={() => HandleDeleteAdmissionsession(data)}
+                      >
+                        <MdDelete size={20} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="8" className="text-center py-10">
+                    Not Created ANY Data Inside This University
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
           {AdmissionsessionListData?.length === 0 && (

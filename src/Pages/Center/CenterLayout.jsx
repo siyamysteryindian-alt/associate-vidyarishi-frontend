@@ -11,7 +11,7 @@ import UseGetCenterSubCenter from "../../CustomHooks/UseGetCenterSubCenter";
 import UseNotifyData from "../../CustomHooks/Notify/UseNotify";
 import DisplayWindowNotify from "../DisplayWindowNotify";
 import UseGetLoggedUser from "../../CustomHooks/UseGetLoggedUser";
-import Mainlogo from "../../../public/logo.png";
+import Mainlogo from "../../../public/logo.jpg";
 import "../../App.css";
 
 /* Local skeleton helpers (same style as AdminMain) */

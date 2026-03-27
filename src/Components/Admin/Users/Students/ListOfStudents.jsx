@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaEdit, FaEye, FaEyeSlash } from "react-icons/fa";
-import image from "../../../../../public/logo.png";
+import image from "../../../../../public/logo.jpg";
 import { IoChevronBack, IoChevronForwardOutline } from "react-icons/io5";
 import { FaCirclePlus } from "react-icons/fa6";
 import { MdDeleteForever } from "react-icons/md";

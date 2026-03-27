@@ -13,7 +13,7 @@ import UseGetDepartments from "../../CustomHooks/UseGetDepartments";
 import UseNotifyData from "../../CustomHooks/Notify/UseNotify";
 import UseGetLoggedUser from "../../CustomHooks/UseGetLoggedUser";
 import DisplayWindowNotify from "../DisplayWindowNotify";
-import Mainlogo from "../../../public/logo.png";
+import Mainlogo from "../../../public/logo.jpg";
 import "../../App.css";
 
 /* UI helpers (skeletons) */

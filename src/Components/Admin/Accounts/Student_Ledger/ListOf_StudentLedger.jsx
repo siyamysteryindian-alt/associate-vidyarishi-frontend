@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react";
-import logo from "../../../../../public/logo.png";
+import logo from "../../../../../public/logo.jpg";
 import UseGetStudentById from "../../../../CustomHooks/UseGetStudentById";
 
 /**

@@ -184,7 +184,7 @@ const AdminMain = () => {
               >
                 <div className="bg-[var(--color-surface)] rounded-2xl px-4 py-2 shadow  flex items-center gap-3">
                   <img
-                    src="../public/logo.png"
+                    src="../public/logo.jpg"
                     className="px-2 py-0.5"
                     alt="Logo Loading...."
                   />

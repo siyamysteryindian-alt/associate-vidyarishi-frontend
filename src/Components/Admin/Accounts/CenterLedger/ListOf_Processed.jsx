@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { MdCancel, MdDelete } from "react-icons/md";
-import image from "../../../../../public/logo.png";
+import image from "../../../../../public/logo.jpg";
 import { FcApproval } from "react-icons/fc";
 import { useSelector } from "react-redux";
 import Loader from "../../../../Helper/Loader";

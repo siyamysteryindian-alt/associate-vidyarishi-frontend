@@ -4,12 +4,16 @@ import { useSelector } from "react-redux";
 import StudentApplicationForm from "./Components/LeadStudentApplicationForm";
 import StudentIdModal from "./Components/GetStudentIdModal";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const Applyfreshstudent = () => {
   const [studentId, setStudentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [studentData, setStudentData] = useState(null);
+
+ const location = useLocation();
+const passedStudentId = location.state?.studentId
 
   const LoggedUser = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -91,6 +95,7 @@ const Applyfreshstudent = () => {
               isOpen={isModalOpen}
               onClose={handleModalClose}
               onSubmit={handleFormSubmit}
+              defaultStudentId={passedStudentId}   // ✅ NEW
             />
           )}
 

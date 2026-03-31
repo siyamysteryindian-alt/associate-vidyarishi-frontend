@@ -4,6 +4,7 @@ import UseGetAdmissionSession from "../../../CustomHooks/UseGetAdmissionSession"
 import UseGetProgramPagination from "../../../CustomHooks/UseGetProgramPagination";
 import UseGetSpecialization from "../../../CustomHooks/UseGetSpecialization";
 import useGetProgramType from "../../../CustomHooks/UseGetProgramType";
+import axios from "axios";
 
 // const StudentApplicationForm = () => {
 const StudentApplicationForm = ({ studentId, studentData }) => {
@@ -44,6 +45,7 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
     email: "",
     whatsapp: "",
     transactionId: "",
+    paymentPlan: "",
     paymentType: "",
     transactionDate: "",
     amount: "",
@@ -63,14 +65,89 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
     }
   }, [form.course]);
 
+  useEffect(() => {
+    setForm((prev) => ({
+      ...prev,
+      amount: "",
+      paymentPlan: "",
+    }));
+  }, [form.specialization]);
+
+  useEffect(() => {
+    if (!form.paymentPlan || !form.specialization) return;
+
+    const selectedSpecialization = SpecializationByProgramId?.find(
+      (s) => s._id === form.specialization,
+    );
+
+    if (!selectedSpecialization) return;
+
+    let amount = 0;
+
+    switch (form.paymentPlan) {
+      case "TotalFee":
+        amount = Number(selectedSpecialization.OneTimeFee || 0);
+        // +
+        // Number(selectedSpecialization.RegistrationFees || 0) +
+        // Number(selectedSpecialization.ExamFees || 0);
+        break;
+
+      case "CourseFee":
+        amount = Number(selectedSpecialization.CourseFee || 0);
+        break;
+
+      case "Semester":
+        amount = Number(selectedSpecialization.SemesterFee || 0);
+        break;
+
+      case "Annual":
+        amount = Number(selectedSpecialization.AnnualFee || 0);
+        break;
+
+      default:
+        amount = 0;
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      amount,
+    }));
+  }, [form.paymentPlan, form.specialization, SpecializationByProgramId]);
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setForm({ ...form, [name]: files ? files[0] : value });
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Form submitted:", form);
+  // };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", form);
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/apply-admission`,
+        {
+          studentId,
+          transactionId: form.transactionId,
+          paymentType: form.paymentType, // PaymentMode
+          paymentPlan: form.paymentPlan, // NEW
+          transactionDate: form.transactionDate,
+          amount: form.amount,
+          discount: form.discount,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+
+      alert("Application submitted successfully");
+    } catch (error) {
+      console.error(error);
+      alert("Error submitting application");
+    }
   };
 
   return (
@@ -188,6 +265,20 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
                 placeholder="Transaction ID"
               />
               <FormSelect
+                name="paymentPlan"
+                value={form.paymentPlan}
+                onChange={handleChange}
+                options={[
+                  { _id: "TotalFee", name: "Total Fee" },
+                  { _id: "CourseFee", name: "Course Fee" },
+                  { _id: "Semester", name: "Semester" },
+                  { _id: "Annual", name: "Annual" },
+                ]}
+                placeholder="Payment Plan"
+                optionLabel="name"
+              />
+
+              <FormSelect
                 name="paymentType"
                 value={form.paymentType}
                 onChange={handleChange}
@@ -209,9 +300,11 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
                 type="number"
                 name="amount"
                 value={form.amount}
+                readOnly
                 onChange={handleChange}
                 placeholder="Amount"
               />
+
               <div>
                 <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
                   Upload File
@@ -223,6 +316,26 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
                   className="w-full text-sm dark:bg-gray-700 dark:text-white"
                 />
               </div>
+
+              {form.paymentPlan === "Total Fee" && (
+                <p className="text-xs text-green-600">
+                  Includes: Registration + Exam + Course Fee
+                </p>
+              )}
+
+              {form.paymentPlan === "Course Fee" && (
+                <p className="text-xs text-pink-600">
+                  Course Fee (excluding registration & exam fee)
+                </p>
+              )}
+
+              {form.paymentPlan === "Semester" && (
+                <p className="text-xs text-blue-600">Semester Fee Applied</p>
+              )}
+
+              {form.paymentPlan === "Annual" && (
+                <p className="text-xs text-purple-600">Annual Fee Applied</p>
+              )}
             </div>
           </div>
 

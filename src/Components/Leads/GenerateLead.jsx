@@ -10,6 +10,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import ShowStudentIdModal from "./ShowStudentId";
 import useLeads from "../../CustomHooks/Leads/useLeads";
+import countriesData from "country-codes-list/dist/countriesData";
 
 const GenerateLead = ({
   ReduxGetDataFromRedux,
@@ -54,6 +55,10 @@ const GenerateLead = ({
     district: "",
     Center: "",
   });
+
+  const countryOptions = Object.values(countriesData).map((country) => ({
+    code: `+${country.countryCallingCode}`,
+  }));
 
   useEffect(() => {
     GetAdmissionSession();
@@ -227,17 +232,9 @@ const GenerateLead = ({
                     onChange={handleChange}
                     className="w-28 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white"
                   >
-                    {[
-                      { code: "+91", country: "India" },
-                      { code: "+1", country: "USA/Canada" },
-                      { code: "+44", country: "UK" },
-                      { code: "+971", country: "UAE" },
-                      { code: "+61", country: "Australia" },
-                      { code: "+92", country: "Pakistan" },
-                      { code: "+880", country: "Bangladesh" },
-                    ].map((opt) => (
-                      <option key={opt.code} value={opt.code}>
-                        {opt.country} ({opt.code})
+                    {countryOptions.map((opt, index) => (
+                      <option key={index} value={opt.code}>
+                        ({opt.code})
                       </option>
                     ))}
                   </select>

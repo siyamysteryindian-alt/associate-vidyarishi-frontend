@@ -69,6 +69,7 @@ import UniversityMLayout from "../Pages/UniversityManager/UniversityMLayout";
 import ProspReg from "../Components/Leads/ProspReg";
 import ShowLead from "../Components/Leads/ShowLead";
 import Showstudents from "../Components/LeadStudents/Showstudents";
+import ShowAllLeads from "../Components/Leads/ShowAllLeads";
 import Applyfreshstudent from "../Components/LeadStudents/Applyfreshstudent";
 import UniversalLeadGenerator from "../Components/Leads/UniversalLeadGenerator";
 import GenerateLead from "../Components/Leads/GenerateLead";
@@ -155,6 +156,11 @@ const router = createBrowserRouter([
               {
                 path: "prospectus-registration",
                 element: <ProspReg />,
+                errorElement: <ErrorPage />,
+              },
+              {
+                path: "show-all-leads",
+                element: <ShowAllLeads />,
                 errorElement: <ErrorPage />,
               },
               {
@@ -343,6 +349,11 @@ const router = createBrowserRouter([
                 errorElement: <ErrorPage />,
               },
               {
+                path: "show-all-leads",
+                element: <ShowAllLeads />,
+                errorElement: <ErrorPage />,
+              },
+              {
                 path: "lead-application-form",
                 element: <Applyfreshstudent />,
                 errorElement: <ErrorPage />,
@@ -461,6 +472,11 @@ const router = createBrowserRouter([
                 errorElement: <ErrorPage />,
               },
               {
+                path: "show-all-leads",
+                element: <ShowAllLeads />,
+                errorElement: <ErrorPage />,
+              },
+              {
                 path: "lead-application-form",
                 element: <Applyfreshstudent />,
                 errorElement: <ErrorPage />,
@@ -562,6 +578,11 @@ const router = createBrowserRouter([
               {
                 path: "prospectus-registration",
                 element: <ProspReg />,
+                errorElement: <ErrorPage />,
+              },
+              {
+                path: "show-all-leads",
+                element: <ShowAllLeads />,
                 errorElement: <ErrorPage />,
               },
               {
@@ -760,6 +781,11 @@ const router = createBrowserRouter([
                 errorElement: <ErrorPage />,
               },
               {
+                path: "show-all-leads",
+                element: <ShowAllLeads />,
+                errorElement: <ErrorPage />,
+              },
+              {
                 path: "lead-application-form",
                 element: <Applyfreshstudent />,
                 errorElement: <ErrorPage />,
@@ -878,6 +904,11 @@ const router = createBrowserRouter([
                 errorElement: <ErrorPage />,
               },
               {
+                path: "show-all-leads",
+                element: <ShowAllLeads />,
+                errorElement: <ErrorPage />,
+              },
+              {
                 path: "lead-application-form",
                 element: <Applyfreshstudent />,
                 errorElement: <ErrorPage />,
@@ -971,6 +1002,11 @@ const router = createBrowserRouter([
                 errorElement: <ErrorPage />,
               },
               {
+                path: "show-all-leads",
+                element: <ShowAllLeads />,
+                errorElement: <ErrorPage />,
+              },
+              {
                 path: "lead-application-form",
                 element: <Applyfreshstudent />,
                 errorElement: <ErrorPage />,
@@ -1056,6 +1092,11 @@ const router = createBrowserRouter([
               {
                 path: "prospectus-registration",
                 element: <ProspReg />,
+                errorElement: <ErrorPage />,
+              },
+              {
+                path: "show-all-leads",
+                element: <ShowAllLeads />,
                 errorElement: <ErrorPage />,
               },
               {

@@ -1,14 +1,37 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
 import { TbCalendarWeek } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
 import ActivityModal from "../Leads/Activity/ShowActivity";
 import ProspRegModal from "../Leads/ProspReg/ProspRegModal";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const leads = [];
+// const leads = [];
 
 const Showstudents = () => {
   const [ActivityOpen, setActivityOpen] = useState(false);
   const [ProspRegOpen, setProspRegOpen] = useState(false);
+
+  const [students, setStudents] = useState([]);
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const fetchStudents = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/get-students`,
+      );
+
+      // ✅ Only show approved students
+      const doneStudents = res.data.data.filter((s) => s.status === "Done");
+
+      setStudents(doneStudents);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <>
@@ -56,7 +79,7 @@ const Showstudents = () => {
                 </tr>
               </thead>
               <tbody>
-                {leads.map((lead) => (
+                {students.map((lead) => (
                   <tr key={lead.id} className="border-b last:border-none">
                     <td className="px-4 py-2 ml-2 w-full">
                       <button
@@ -86,19 +109,21 @@ const Showstudents = () => {
                     <td className="px-4 py-2 truncate max-w-xs">
                       {lead.regDate}
                     </td>
-                    <td className="px-4 py-2 truncate max-w-xs">{lead.name}</td>
                     <td className="px-4 py-2 truncate max-w-xs">
-                      {lead.mobile}
+                      {lead.FirstName} {lead.LastName}
+                    </td>
+                    <td className="px-4 py-2 truncate max-w-xs">
+                      {lead.Phone}
                     </td>
 
                     <td className="px-4 py-2 truncate max-w-xs">
-                      {lead.email}
+                      {lead.EmailAddress}
                     </td>
                     <td className="px-4 py-2 truncate max-w-xs">
-                      {lead.course}
+                      {lead.Program?.name}
                     </td>
                     <td className="px-4 py-2 truncate max-w-xs">
-                      {lead.specialization}
+                      {lead.SubCourse?.name}
                     </td>
 
                     <td className="px-4 py-2 truncate max-w-xs">
@@ -107,7 +132,9 @@ const Showstudents = () => {
                     <td className="px-4 py-2 truncate max-w-xs">
                       {lead.partner}
                     </td>
-                    <td className="px-4 py-2 truncate max-w-xs">{lead.dob}</td>
+                    <td className="px-4 py-2 truncate max-w-xs">
+                      {lead.DateOfBirth}
+                    </td>
                     <td className="px-4 py-2 truncate max-w-sm">
                       {lead.company}
                     </td>
@@ -123,7 +150,7 @@ const Showstudents = () => {
 
         <div className="flex justify-between items-center mt-4 text-sm text-gray-600">
           <span>
-            Showing 1 to {leads.length} of {leads.length} entries
+            Showing 1 to {students.length} of {students.length} entries
           </span>
           <div className="flex items-center gap-2">
             <button className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">

@@ -82,6 +82,9 @@ const UpdateSpecialization = ({
     CTstart: "",
     CTSOL: "",
     CourseFee: "",
+    OneTimeFee: "",
+    AnnualFee: "",
+    SemesterFee: "",
   });
 
   // Selected items array used by multi-select UI (keeps consistent with formData.Academic)
@@ -128,7 +131,7 @@ const UpdateSpecialization = ({
     if (!EditSpecializationUpdate) return;
 
     const initialAcademic = Array.isArray(
-      EditSpecializationUpdate?.admissionEligibility
+      EditSpecializationUpdate?.admissionEligibility,
     )
       ? EditSpecializationUpdate.admissionEligibility.slice()
       : [];
@@ -152,6 +155,9 @@ const UpdateSpecialization = ({
       CTstart: EditSpecializationUpdate?.startCT ?? "",
       CTSOL: EditSpecializationUpdate?.solCT ?? "",
       CourseFee: EditSpecializationUpdate?.CourseFee ?? "",
+      AnnualFee: EditSpecializationUpdate?.AnnualFee ?? "",
+      SemesterFee: EditSpecializationUpdate?.SemesterFee ?? "",
+      OneTimeFee: EditSpecializationUpdate?.OneTimeFee ?? "",
     });
 
     setSelectedItems(initialAcademic);
@@ -160,7 +166,7 @@ const UpdateSpecialization = ({
   // keep declareFeesVisible in sync with durations
   useEffect(() => {
     setDeclareFeesVisible(
-      Boolean(formData.MinDuration && formData.MaxDuration)
+      Boolean(formData.MinDuration && formData.MaxDuration),
     );
   }, [formData.MinDuration, formData.MaxDuration]);
 
@@ -225,7 +231,7 @@ const UpdateSpecialization = ({
   };
 
   const filteredOptions = options.filter((option) =>
-    option.toLowerCase().includes(searchQuery.toLowerCase())
+    option.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // validation: simple required checks
@@ -253,7 +259,14 @@ const UpdateSpecialization = ({
     });
 
     if (declareFeesVisible) {
-      ["CourseFee", "ExamFees", "RegistrationFees"].forEach((f) => {
+      [
+        "CourseFee",
+        "AnnualFee",
+        "SemesterFee",
+        "ExamFees",
+        "RegistrationFees",
+         "OneTimeFee",
+      ].forEach((f) => {
         if (!formData[f]) errors[f] = "This field is required";
       });
     }
@@ -304,6 +317,9 @@ const UpdateSpecialization = ({
         RegistrationFees: formData.RegistrationFees,
         ExamFees: formData.ExamFees,
         CourseFee: formData.CourseFee,
+        OneTimeFee: formData.OneTimeFee,
+        AnnualFee: formData.AnnualFee,
+        SemesterFee: formData.SemesterFee,
       };
 
       const Response = await axios.patch(
@@ -311,7 +327,7 @@ const UpdateSpecialization = ({
         payload,
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (Response?.data?.success) {
@@ -324,7 +340,7 @@ const UpdateSpecialization = ({
     } catch (err) {
       console.error("UpdateSpecialization error:", err);
       toast.error(
-        err?.response?.data?.message || "An error occurred. Please try again."
+        err?.response?.data?.message || "An error occurred. Please try again.",
       );
     } finally {
       setIsSubmitting(false);
@@ -824,6 +840,62 @@ const UpdateSpecialization = ({
                     className="block mb-1 text-xs font-medium"
                     style={{ color: "var(--brand-ink)" }}
                   >
+                    Annual Fee <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    name="AnnualFee"
+                    value={formData.AnnualFee}
+                    onChange={handleOnchangeInputField}
+                    type="number"
+                    className="w-full bg-transparent text-sm px-2 py-2 rounded-md focus:outline-none"
+                    style={{
+                      background: "var(--bg)",
+                      borderRadius: 12,
+                      padding: "8px",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                      border: "1px solid rgba(0,0,0,0.06)",
+                    }}
+                  />
+                  {formTouched && validationErrors.AnnualFee && (
+                    <div className="mt-1 text-xs text-red-600">
+                      {validationErrors.AnnualFee}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label
+                    className="block mb-1 text-xs font-medium"
+                    style={{ color: "var(--brand-ink)" }}
+                  >
+                    Semester Fee <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    name="SemesterFee"
+                    value={formData.SemesterFee}
+                    onChange={handleOnchangeInputField}
+                    type="number"
+                    className="w-full bg-transparent text-sm px-2 py-2 rounded-md focus:outline-none"
+                    style={{
+                      background: "var(--bg)",
+                      borderRadius: 12,
+                      padding: "8px",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                      border: "1px solid rgba(0,0,0,0.06)",
+                    }}
+                  />
+                  {formTouched && validationErrors.SemesterFee && (
+                    <div className="mt-1 text-xs text-red-600">
+                      {validationErrors.SemesterFee}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label
+                    className="block mb-1 text-xs font-medium"
+                    style={{ color: "var(--brand-ink)" }}
+                  >
                     Exam Fees <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -871,6 +943,34 @@ const UpdateSpecialization = ({
                   {formTouched && validationErrors.RegistrationFees && (
                     <div className="mt-1 text-xs text-red-600">
                       {validationErrors.RegistrationFees}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label
+                    className="block mb-1 text-xs font-medium"
+                    style={{ color: "var(--brand-ink)" }}
+                  >
+                    One Time Fee <span className="text-red-500">* (Includes: Registration + Exam + Course Fee)</span>
+                  </label>
+                  <input
+                    name="OneTimeFee"
+                    value={formData.OneTimeFee}
+                    onChange={handleOnchangeInputField}
+                    type="number"
+                    className="w-full bg-transparent text-sm px-2 py-2 rounded-md focus:outline-none"
+                    style={{
+                      background: "var(--bg)",
+                      borderRadius: 12,
+                      padding: "8px",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                      border: "1px solid rgba(0,0,0,0.06)",
+                    }}
+                  />
+                  {formTouched && validationErrors.OneTimeFee && (
+                    <div className="mt-1 text-xs text-red-600">
+                      {validationErrors.OneTimeFee}
                     </div>
                   )}
                 </div>

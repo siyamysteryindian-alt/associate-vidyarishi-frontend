@@ -18,7 +18,7 @@ const ProspRegModal = ({ onClose }) => {
       fileName: file?.name || null,
     };
 
-    console.log("✅ Show All Leads Form Submitted:", formData);
+    console.log("✅ Prosp/Reg Form Submitted:", formData);
 
     // TODO: You can replace this with actual API call if needed
     onClose();

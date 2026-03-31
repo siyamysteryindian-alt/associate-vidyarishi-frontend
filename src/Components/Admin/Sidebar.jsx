@@ -449,7 +449,7 @@ const Sidebar = () => {
     if (
       Location.pathname === "/admin/lead-generate" ||
       Location.pathname === "/admin/show-lead" ||
-      Location.pathname === "/admin/prospectus-registration" ||
+      Location.pathname === "/admin/show-all-leads" ||
       Location.pathname === "/admin/universal-lead-generator"
     ) {
       setNavMyProfileToggle(false);
@@ -691,7 +691,7 @@ const Sidebar = () => {
 
                           <li>
                             <NavLink
-                              to={"prospectus-registration"}
+                              to={"show-all-leads"}
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
@@ -1141,7 +1141,7 @@ const Sidebar = () => {
 
                           <li>
                             <NavLink
-                              to={"prospectus-registration"}
+                              to={"show-all-leads"}
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
@@ -1574,7 +1574,7 @@ const Sidebar = () => {
 
                           <li>
                             <NavLink
-                              to={"prospectus-registration"}
+                              to={"show-all-leads"}
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
@@ -2044,7 +2044,7 @@ const Sidebar = () => {
 
                         <li>
                           <NavLink
-                            to={"prospectus-registration"}
+                            to={"show-all-leads"}
                             className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <RiArrowDropRightFill size={16} />
@@ -2396,7 +2396,7 @@ const Sidebar = () => {
 
                           <li>
                             <NavLink
-                              to={"prospectus-registration"}
+                              to={"show-all-leads"}
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
@@ -2741,7 +2741,7 @@ const Sidebar = () => {
 
                           <li>
                             <NavLink
-                              to={"prospectus-registration"}
+                              to={"show-all-leads"}
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />
@@ -3041,7 +3041,7 @@ const Sidebar = () => {
 
                         <li>
                           <NavLink
-                            to={"prospectus-registration"}
+                            to={"show-all-leads"}
                             className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                           >
                             <RiArrowDropRightFill size={16} />
@@ -3592,7 +3592,7 @@ const Sidebar = () => {
 
                           <li>
                             <NavLink
-                              to={"prospectus-registration"}
+                              to={"show-all-leads"}
                               className="flex items-center gap-2 px-6 py-2 rounded-md text-sm hover:bg-slate-100 dark:hover:bg-slate-800"
                             >
                               <RiArrowDropRightFill size={16} />

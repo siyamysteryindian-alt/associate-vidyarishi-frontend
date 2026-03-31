@@ -73,6 +73,9 @@ const CreateSpecialization = ({
     CTstart: "",
     CTSOL: "",
     CourseFee: "",
+    AnnualFee: "",
+    SemesterFee: "",
+    OneTimeFee: "",
   });
 
   // programs for selected university
@@ -133,13 +136,13 @@ const CreateSpecialization = ({
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/GetDepartmentByUniversities`,
         { UniversityId: universityId },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (response?.data?.success) {
         // API returned programData previously; fall back gracefully
         setProgramsUniversity(
-          response?.data?.programData || response?.data?.data || []
+          response?.data?.programData || response?.data?.data || [],
         );
       } else {
         toast.error(response?.data?.message || "Failed to load programs");
@@ -193,7 +196,7 @@ const CreateSpecialization = ({
   };
 
   const filteredOptions = options.filter((option) =>
-    option.toLowerCase().includes(searchQuery.toLowerCase())
+    option.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // validation routine (only checks required non-empty fields)
@@ -220,9 +223,16 @@ const CreateSpecialization = ({
       }
     });
 
-    // if declare fees visible, require at least CourseFee, ExamFees, RegistrationFees
+    // if declare fees visible, require at least CourseFee, OneTimeFee, AnnualFee, SemesterFee, ExamFees, RegistrationFees;
     if (declareFeesVisible) {
-      ["CourseFee", "ExamFees", "RegistrationFees"].forEach((f) => {
+      [
+        "CourseFee",
+        "AnnualFee",
+        "SemesterFee",
+        "ExamFees",
+        "RegistrationFees",
+        "OneTimeFee",
+      ].forEach((f) => {
         if (!data[f]) errors[f] = "This field is required";
       });
     }
@@ -268,13 +278,16 @@ const CreateSpecialization = ({
         startCT: data.CTstart,
         solCT: data.CTSOL,
         CourseFee: data.CourseFee,
+        AnnualFee: data.AnnualFee,
+        SemesterFee: data.SemesterFee,
+        OneTimeFee: data.OneTimeFee,
         role: "Specialization",
       };
 
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/Create-Specialization`,
         payload,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (response?.data?.success) {
@@ -283,13 +296,13 @@ const CreateSpecialization = ({
         CloseeCreateSpecialization && CloseeCreateSpecialization();
       } else {
         toast.error(
-          response?.data?.message || "Failed to create specialization"
+          response?.data?.message || "Failed to create specialization",
         );
       }
     } catch (err) {
       console.error(err);
       toast.error(
-        err?.response?.data?.message || "An error occurred. Please try again."
+        err?.response?.data?.message || "An error occurred. Please try again.",
       );
     } finally {
       setIsSubmitting(false);
@@ -433,7 +446,7 @@ const CreateSpecialization = ({
                         <option key={p._id} value={p._id}>
                           {p?.name}
                         </option>
-                      )
+                      ),
                     )}
                   </select>
                 </InputWrap>
@@ -784,6 +797,61 @@ const CreateSpecialization = ({
                     className="block mb-1 text-xs font-medium"
                     style={{ color: "var(--brand-ink)" }}
                   >
+                    Annual Fee <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    name="AnnualFee"
+                    value={data.AnnualFee}
+                    onChange={handleOnchangeInputField}
+                    type="number"
+                    className="w-full bg-transparent text-sm px-2 py-2 rounded-md focus:outline-none"
+                    style={{
+                      background: "var(--bg)",
+                      borderRadius: 12,
+                      padding: "8px",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                      border: "1px solid rgba(0,0,0,0.06)",
+                    }}
+                  />
+                  {formTouched && validationErrors.AnnualFee && (
+                    <div className="mt-1 text-xs text-red-600">
+                      {validationErrors.AnnualFee}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <label
+                    className="block mb-1 text-xs font-medium"
+                    style={{ color: "var(--brand-ink)" }}
+                  >
+                    Semester Fee <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    name="SemesterFee"
+                    value={data.SemesterFee}
+                    onChange={handleOnchangeInputField}
+                    type="number"
+                    className="w-full bg-transparent text-sm px-2 py-2 rounded-md focus:outline-none"
+                    style={{
+                      background: "var(--bg)",
+                      borderRadius: 12,
+                      padding: "8px",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                      border: "1px solid rgba(0,0,0,0.06)",
+                    }}
+                  />
+                  {formTouched && validationErrors.SemesterFee && (
+                    <div className="mt-1 text-xs text-red-600">
+                      {validationErrors.SemesterFee}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label
+                    className="block mb-1 text-xs font-medium"
+                    style={{ color: "var(--brand-ink)" }}
+                  >
                     Exam Fees <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -831,6 +899,33 @@ const CreateSpecialization = ({
                   {formTouched && validationErrors.RegistrationFees && (
                     <div className="mt-1 text-xs text-red-600">
                       {validationErrors.RegistrationFees}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <label
+                    className="block mb-1 text-xs font-medium"
+                    style={{ color: "var(--brand-ink)" }}
+                  >
+                    One Time Fee <span className="text-red-500">* (Includes: Registration + Exam + Course Fee)</span>
+                  </label>
+                  <input
+                    name="OneTimeFee"
+                    value={data.OneTimeFee}
+                    onChange={handleOnchangeInputField}
+                    type="number"
+                    className="w-full bg-transparent text-sm px-2 py-2 rounded-md focus:outline-none"
+                    style={{
+                      background: "var(--bg)",
+                      borderRadius: 12,
+                      padding: "8px",
+                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                      border: "1px solid rgba(0,0,0,0.06)",
+                    }}
+                  />
+                  {formTouched && validationErrors.OneTimeFee && (
+                    <div className="mt-1 text-xs text-red-600">
+                      {validationErrors.OneTimeFee}
                     </div>
                   )}
                 </div>

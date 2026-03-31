@@ -397,7 +397,7 @@ const Sidebar = () => {
     if (
       Location.pathname === "/admin/lead-generate" ||
       Location.pathname === "/admin/show-lead" ||
-      Location.pathname === "/admin/prospectus-registration" ||
+      Location.pathname === "/admin/show-all-leads" ||
       Location.pathname === "/admin/universal-lead-generator"
     ) {
       setNavMyProfileToggle(false);
@@ -607,7 +607,7 @@ const Sidebar = () => {
                                   Show
                                 </NavLink>
                                 <NavLink
-                                  to={"prospectus-registration"}
+                                  to={"show-all-leads"}
                                   className={
                                     "dark:hover:bg-slate-600 hover:bg-slate-300 AcademicHome px-6 py-2  w-full flex justify-start items-center rounded-lg"
                                   }
@@ -1012,7 +1012,7 @@ const Sidebar = () => {
                                   Show
                                 </NavLink>
                                 <NavLink
-                                  to={"prospectus-registration"}
+                                  to={"show-all-leads"}
                                   className={
                                     "dark:hover:bg-slate-600 hover:bg-slate-300 AcademicHome px-6 py-2  w-full flex justify-start items-center rounded-lg"
                                   }
@@ -1378,7 +1378,7 @@ const Sidebar = () => {
                                   Show
                                 </NavLink>
                                 <NavLink
-                                  to={"prospectus-registration"}
+                                  to={"show-all-leads"}
                                   className={
                                     "dark:hover:bg-slate-600 hover:bg-slate-300 AcademicHome px-6 py-2  w-full flex justify-start items-center rounded-lg"
                                   }
@@ -1776,7 +1776,7 @@ const Sidebar = () => {
                                 Show
                               </NavLink>
                               <NavLink
-                                to={"prospectus-registration"}
+                                to={"show-all-leads"}
                                 className={
                                   "dark:hover:bg-slate-600 hover:bg-slate-300 AcademicHome px-6 py-2  w-full flex justify-start items-center rounded-lg"
                                 }
@@ -2075,7 +2075,7 @@ const Sidebar = () => {
                                   Show
                                 </NavLink>
                                 <NavLink
-                                  to={"prospectus-registration"}
+                                  to={"show-all-leads"}
                                   className={
                                     "dark:hover:bg-slate-600 hover:bg-slate-300 AcademicHome px-6 py-2  w-full flex justify-start items-center rounded-lg"
                                   }
@@ -2367,7 +2367,7 @@ const Sidebar = () => {
                                   Show
                                 </NavLink>
                                 <NavLink
-                                  to={"prospectus-registration"}
+                                  to={"show-all-leads"}
                                   className={
                                     "dark:hover:bg-slate-600 hover:bg-slate-300 AcademicHome px-6 py-2  w-full flex justify-start items-center rounded-lg"
                                   }
@@ -2620,7 +2620,7 @@ const Sidebar = () => {
                                 Show
                               </NavLink>
                               <NavLink
-                                to={"prospectus-registration"}
+                                to={"show-all-leads"}
                                 className={
                                   "dark:hover:bg-slate-600 hover:bg-slate-300 AcademicHome px-6 py-2  w-full flex justify-start items-center rounded-lg"
                                 }
@@ -3099,7 +3099,7 @@ const Sidebar = () => {
                                   Show
                                 </NavLink>
                                 <NavLink
-                                  to={"prospectus-registration"}
+                                  to={"show-all-leads"}
                                   className={
                                     "dark:hover:bg-slate-600 hover:bg-slate-300 AcademicHome px-6 py-2  w-full flex justify-start items-center rounded-lg"
                                   }

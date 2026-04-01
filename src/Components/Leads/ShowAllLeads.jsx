@@ -1,30 +1,130 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TbCalendarWeek } from "react-icons/tb";
 import ActivityModal from "./Activity/ShowActivity";
-
-const leads = [];
+import axios from "axios";
+import { saveAs } from "file-saver";
+import { NavLink } from "react-router-dom";
 
 const ShowAllLeads = () => {
-
   const [activityOpen, setActivityOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [leads, setLeads] = useState([]);
+
+  useEffect(() => {
+    fetchLeads();
+  }, []);
+
+  const fetchLeads = async () => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/get-all-leads`,
+        {
+          withCredentials: true,
+        },
+      );
+
+      setLeads(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const filteredLeads = leads.filter((lead) => {
+    const search = searchTerm.toLowerCase();
+
+    return (
+      `${lead.FirstName} ${lead.LastName}`.toLowerCase().includes(search) ||
+      lead.EmailAddress?.toLowerCase().includes(search) ||
+      lead.Phone?.toLowerCase().includes(search) ||
+      lead.whoCreated?.name?.toLowerCase().includes(search) ||
+      lead.whoCreated?.code?.toLowerCase().includes(search)
+    );
+  });
+
+  const handleDownloadLeads = () => {
+    try {
+      const headers = [
+        "Name",
+        "Email",
+        "Mobile",
+        "Course",
+        "Specialization",
+        "Student ID",
+        "Status",
+        "Created On",
+      ];
+
+      const rows = filteredLeads.map((lead) => [
+        `${lead.FirstName || ""} ${lead.LastName || ""}`,
+        lead.EmailAddress || "",
+        lead.Phone || "",
+        lead.Program?.name || "",
+        lead.SubCourse?.name || "",
+        lead.StudentId || "",
+        lead.status || "",
+        new Date(lead.createdAt).toLocaleString(),
+      ]);
+
+      const csvContent = [headers, ...rows]
+        .map((row) => row.map((item) => `"${item}"`).join(","))
+        .join("\n");
+
+      const blob = new Blob([csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
+
+      saveAs(blob, "All_Leads.csv");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
       <section className="mt-2 mx-2 rounded-xl">
         {/* ===================== TOP HEADER ===================== */}
-        <div
-          className="w-full flex items-center justify-between px-6 py-4 rounded-xl mb-4"
-          style={{
-            background: "var(--surface)",
-            boxShadow: "var(--soft-shadow)",
-            borderRadius: "var(--card-radius)",
-          }}
-        >
-          <h2 className="text-base font-semibold text-gray-800 dark:text-gray-100">
-            All Leads
-          </h2>
-        </div>
+        <div className="w-full flex items-center justify-between px-6 py-4 rounded-xl mb-4">
+          <h2 className="text-base font-semibold">All Leads</h2>
 
+          <div className="flex gap-3 items-center">
+            <div className="relative w-[25rem]">
+              <input
+                type="text"
+                // placeholder="Search by Name, Email, Mobile, State or District"
+                placeholder="Search by Name, Email, Mobile or Lead owner"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+               className="w-full px-4 py-2 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+
+              {/* Clear Button */}
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-500 text-lg"
+                >
+                  ❌
+                </button>
+              )}
+            </div>
+
+            {/* ➕ ADD LEAD */}
+            <NavLink
+              to="/admin/lead-generate"
+              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+            >
+              + Add Lead
+            </NavLink>
+
+            {/* 📥 DOWNLOAD */}
+            <button
+              onClick={handleDownloadLeads}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+            >
+              Download
+            </button>
+          </div>
+        </div>
         {/* ===================== TABLE WRAPPER ===================== */}
         <div
           className="overflow-hidden rounded-2xl"
@@ -39,11 +139,10 @@ const ShowAllLeads = () => {
               <thead className="sticky top-0 bg-gray-100 dark:bg-gray-800 z-10 shadow-sm">
                 <tr className="text-xs uppercase text-gray-600 dark:text-gray-300 tracking-wide">
                   {[
-                    "University",
                     "Activity",
+                    "University",
                     "Status",
                     "Created On",
-                    "Registration Date",
                     "Name",
                     "Mobile",
                     "Email",
@@ -52,7 +151,6 @@ const ShowAllLeads = () => {
                     "Student ID",
                     "Partner",
                     "DOB",
-                    "Company",
                     "Counselor",
                   ].map((head) => (
                     <th
@@ -66,81 +164,105 @@ const ShowAllLeads = () => {
               </thead>
 
               {/* ------------------- TABLE BODY ------------------- */}
-              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+              <tbody className="divide-y">
                 {leads.length === 0 ? (
                   <tr>
-                    <td
-                      colSpan="14"
-                      className="text-center py-10 text-gray-500 dark:text-gray-300"
-                    >
-                      No leads found.
+                    <td colSpan="15" className="text-center py-10">
+                      No leads found
                     </td>
                   </tr>
                 ) : (
-                  leads.map((lead) => (
-                    <tr
-                      key={lead.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-900 transition"
-                    >
-                      <td className="px-4 py-3">
+                  filteredLeads.map((lead) => (
+                    <tr key={lead._id} className="hover:bg-gray-50 transition">
+                      {/* Activity */}
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <button
                           onClick={() => setActivityOpen(true)}
-                          className="text-blue-600 hover:bg-blue-600 hover:text-white p-1 rounded transition"
+                          className="text-blue-600 hover:bg-blue-600 hover:text-white p-1 rounded"
                         >
                           <TbCalendarWeek size={22} />
                         </button>
                       </td>
-
                       {/* University */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.university?.name || "-"}
+                        {lead.university?.shortName ||
+                          lead.university?.name ||
+                          "-"}
                       </td>
 
-                      <td className="px-4 py-3">
-                        <span
-                          className={`px-2 py-1 rounded-md text-xs font-semibold ${
-                            lead.status === "Done"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-gray-100 text-gray-700"
-                          }`}
-                        >
-                          {lead.status}
+                      {/* Status */}
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className="px-2 py-1 rounded text-xs bg-gray-100">
+                          <span
+                            className={`px-2 py-1 rounded-md text-xs font-medium ${
+                              lead.status === "Done"
+                                ? "bg-green-100 text-green-700"
+                                : lead.status === "Payment-Done"
+                                  ? "bg-blue-100 text-blue-700"
+                                  : lead.status === "Admission"
+                                    ? "bg-pink-100 text-pink-700"
+                                    : "bg-gray-100 text-gray-700"
+                            }`}
+                          >
+                            {lead.status}
+                          </span>
                         </span>
                       </td>
 
+                      {/* Created */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.createdOn}
+                        {new Date(lead.createdAt).toLocaleString()}
                       </td>
+
+                      {/* Name */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.regDate}
+                        {lead.FirstName} {lead.LastName}
                       </td>
+
+                      {/* Mobile */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.name}
+                        {lead.Phone}
                       </td>
+
+                      {/* Email */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.mobile}
+                        {lead.EmailAddress}
                       </td>
+
+                      {/* Course */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.email}
+                        {lead.Program?.name || "-"}
                       </td>
+
+                      {/* Specialization */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.course}
+                        {lead.SubCourse?.name || "-"}
                       </td>
+
+                      {/* Student ID */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.specialization}
+                        {lead.StudentId}
                       </td>
-                      <td className="px-4 py-3 whitespace-nowrap">{lead.id}</td>
+
+                      {/* Partner */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.partner}
+                        {lead.whoCreated
+                          ? `${lead.whoCreated.code} (${lead.whoCreated.name})`
+                          : "-"}
                       </td>
+
+                      {/* DOB */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.dob}
+                        {lead.DateOfBirth
+                          ? new Date(lead.DateOfBirth).toLocaleDateString(
+                              "en-GB",
+                            )
+                          : "-"}
                       </td>
-                      <td className="px-4 py-3 max-w-sm truncate">
-                        {lead.company}
-                      </td>
+
+                      {/* Counselor */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.counselor}
+                        {lead.ReportingManager?.name || "-"}
                       </td>
                     </tr>
                   ))
@@ -177,6 +299,6 @@ const ShowAllLeads = () => {
       {activityOpen && <ActivityModal onClose={() => setActivityOpen(false)} />}
     </>
   );
-}
+};
 
 export default ShowAllLeads;

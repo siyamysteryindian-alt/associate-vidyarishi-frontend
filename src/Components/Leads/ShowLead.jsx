@@ -122,8 +122,7 @@ const ShowLead = () => {
           <div className="relative w-[25rem]">
             <input
               type="text"
-              // placeholder="Search by Name, Email, Mobile, State or District"
-              placeholder="Search by Name, Email, Mobile or Lead owner"
+              placeholder="Search by Name, Email, Mobile or Partner"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-4 py-2 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -249,13 +248,13 @@ const ShowLead = () => {
                             {lead.status}
                           </button>
                         ) : lead.status === "Admission" ? (
-                        <Link
-  to={`/${LoggedUser.role}/lead-application-form`}
-  state={{ studentId: lead.StudentId }}
-  className="hover:underline text-pink-700 font-semibold"
->
-  Apply Admission
-</Link>
+                          <Link
+                            to={`/${LoggedUser.role}/lead-application-form`}
+                            state={{ studentId: lead.StudentId }}
+                            className="hover:underline text-pink-700 font-semibold"
+                          >
+                            Apply Admission
+                          </Link>
                         ) : (
                           lead.status
                         )}

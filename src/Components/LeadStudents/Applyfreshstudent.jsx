@@ -12,8 +12,8 @@ const Applyfreshstudent = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [studentData, setStudentData] = useState(null);
 
- const location = useLocation();
-const passedStudentId = location.state?.studentId
+  const location = useLocation();
+  const passedStudentId = location.state?.studentId;
 
   const LoggedUser = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -61,10 +61,10 @@ const passedStudentId = location.state?.studentId
       );
 
       if (response.data.success) {
-        setStudentId(enteredStudentId);
+        const data = response.data.data;
 
-        // 👇 store fetched data
-        setStudentData(response.data.data);
+        setStudentId(data._id); // ✅ ObjectId
+        setStudentData(data);
 
         setIsModalOpen(false);
       } else {
@@ -95,14 +95,13 @@ const passedStudentId = location.state?.studentId
               isOpen={isModalOpen}
               onClose={handleModalClose}
               onSubmit={handleFormSubmit}
-              defaultStudentId={passedStudentId}   // ✅ NEW
+              defaultStudentId={passedStudentId} // ✅ NEW
             />
           )}
 
           {!isModalOpen && studentId ? (
-            // <StudentApplicationForm studentId={studentId} />
             <StudentApplicationForm
-              studentId={studentId}
+              studentId={studentData?._id}
               studentData={studentData}
             />
           ) : null}

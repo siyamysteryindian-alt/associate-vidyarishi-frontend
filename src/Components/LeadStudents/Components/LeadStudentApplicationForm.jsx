@@ -5,6 +5,7 @@ import UseGetProgramPagination from "../../../CustomHooks/UseGetProgramPaginatio
 import UseGetSpecialization from "../../../CustomHooks/UseGetSpecialization";
 import useGetProgramType from "../../../CustomHooks/UseGetProgramType";
 import axios from "axios";
+import uploadFile from "../../../Helper/UploadFile";
 
 // const StudentApplicationForm = () => {
 const StudentApplicationForm = ({ studentId, studentData }) => {
@@ -126,21 +127,49 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let fileUrl = "";
+
     try {
+      // ✅ Upload to Cloudinary first
+      if (form.file) {
+        const uploadRes = await uploadFile(form.file);
+        fileUrl = uploadRes?.url || "";
+      }
+
+      // ✅ Send URL to backend
       await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/apply-admission`,
         {
           studentId,
           transactionId: form.transactionId,
-          paymentType: form.paymentType, // PaymentMode
-          paymentPlan: form.paymentPlan, // NEW
+          paymentType: form.paymentType,
+          paymentPlan: form.paymentPlan,
           transactionDate: form.transactionDate,
           amount: form.amount,
           discount: form.discount,
+          receipt: fileUrl, // ✅ ADD THIS
         },
+        { withCredentials: true },
+      );
+
+      // AFTER apply-admission success
+
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/create-payment`,
         {
-          withCredentials: true,
+          leadStudentId: studentData?._id,
+          admissionFeeId: form.specialization,
+          paymentMethod: form.paymentType.toLowerCase(),
+          paymentAmount: form.amount,
+          DiscountAmount: Number(form.discount) || 0,
+          FinalAmount: Number(form.amount) - Number(form.discount || 0), // ✅ FIX
+          paymentDate: form.transactionDate,
+          BankName: "manual",
+          ProofPhoto: fileUrl,
+
+          transactionId: form.transactionId, // ✅ ADD THIS
         },
+        { withCredentials: true },
       );
 
       alert("Application submitted successfully");
@@ -263,6 +292,7 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
                 value={form.transactionId}
                 onChange={handleChange}
                 placeholder="Transaction ID"
+                required
               />
               <FormSelect
                 name="paymentPlan"
@@ -296,6 +326,7 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
                 value={form.transactionDate}
                 onChange={handleChange}
               />
+
               <FormField
                 type="number"
                 name="amount"
@@ -307,23 +338,24 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
 
               <div>
                 <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
-                  Upload File
+                  Upload File *
                 </label>
                 <input
                   type="file"
                   name="file"
                   onChange={handleChange}
                   className="w-full text-sm dark:bg-gray-700 dark:text-white"
+                  required
                 />
               </div>
 
-              {form.paymentPlan === "Total Fee" && (
+              {form.paymentPlan === "TotalFee" && (
                 <p className="text-xs text-green-600">
                   Includes: Registration + Exam + Course Fee
                 </p>
               )}
 
-              {form.paymentPlan === "Course Fee" && (
+              {form.paymentPlan === "CourseFee" && (
                 <p className="text-xs text-pink-600">
                   Course Fee (excluding registration & exam fee)
                 </p>

@@ -17,14 +17,15 @@ const UpdateOfflinePayment = ({
   GetAllPaymentData,
 }) => {
   const [UpdatePaymentWindowData, setUpdatePaymentWindowData] = useState({
-    studentId: PaymentDataById?.studentId?._id ?? "",
+    StudentId: PaymentDataById?.studentId?._id || null,
+    leadStudentId: PaymentDataById?.leadStudentId?._id || null,
     PaymentType: PaymentDataById?.paymentMethod ?? "",
     BankName: PaymentDataById?.BankName ?? "",
     TransactionId: PaymentDataById?.transactionId ?? "",
     Amount: PaymentDataById?.paymentAmount ?? "",
     Date: PaymentDataById?.paymentDate
-      ? PaymentDataById?.paymentDate.split?.("T")?.[0] ??
-        PaymentDataById?.paymentDate
+      ? (PaymentDataById?.paymentDate.split?.("T")?.[0] ??
+        PaymentDataById?.paymentDate)
       : "",
     Photo: PaymentDataById?.ProofPhoto ?? "",
     paymentMark: PaymentDataById?.paymentRemark ?? "",
@@ -41,8 +42,8 @@ const UpdateOfflinePayment = ({
       TransactionId: PaymentDataById?.transactionId ?? "",
       Amount: PaymentDataById?.paymentAmount ?? "",
       Date: PaymentDataById?.paymentDate
-        ? PaymentDataById?.paymentDate.split?.("T")?.[0] ??
-          PaymentDataById?.paymentDate
+        ? (PaymentDataById?.paymentDate.split?.("T")?.[0] ??
+          PaymentDataById?.paymentDate)
         : "",
       Photo: PaymentDataById?.ProofPhoto ?? "",
       paymentMark: PaymentDataById?.paymentRemark ?? "",
@@ -92,7 +93,10 @@ const UpdateOfflinePayment = ({
         `${import.meta.env.VITE_BACKEND_URL}/edit-payment-offline-in-payment`,
         {
           PaymentDataById: PaymentDataById?._id,
-          StudentId: UpdatePaymentWindowData?.studentId,
+          // StudentId: UpdatePaymentWindowData?.studentId,
+
+          StudentId: PaymentDataById?.studentId?._id || null,
+          leadStudentId: PaymentDataById?.leadStudentId?._id || null,
           PaymentDate: UpdatePaymentWindowData.Date,
           Amount: UpdatePaymentWindowData?.Amount,
           BankName: UpdatePaymentWindowData?.BankName,
@@ -103,12 +107,12 @@ const UpdateOfflinePayment = ({
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (response?.data?.success) {
         toast.success(
-          response?.data?.message || "Payment updated successfully"
+          response?.data?.message || "Payment updated successfully",
         );
         GetAllPaymentData?.();
         HandleEditPaymentClose?.();
@@ -117,7 +121,7 @@ const UpdateOfflinePayment = ({
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "An error occurred. Please try again."
+        error.response?.data?.message || "An error occurred. Please try again.",
       );
     } finally {
       setSubmitting(false);
@@ -206,6 +210,7 @@ const UpdateOfflinePayment = ({
                   "net_banking",
                   "cash",
                   "upi",
+                  "cheque",
                 ].map((opt) => (
                   <option key={opt} value={opt}>
                     {opt.replace("_", " ").toUpperCase()}

@@ -77,7 +77,7 @@ const ListOfOflinePayments = ({
       const res = await axios.patch(
         `${import.meta.env.VITE_BACKEND_URL}/approve-payment/${data?._id}`,
         {},
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (res?.data?.success) {
         Swal.fire(res.data.message || "Payment approved", "", "success");
@@ -107,7 +107,7 @@ const ListOfOflinePayments = ({
       const res = await axios.patch(
         `${import.meta.env.VITE_BACKEND_URL}/reject-payment`,
         { paymentid: data?._id },
-        { withCredentials: true }
+        { withCredentials: true },
       );
       if (res?.data?.success) {
         Swal.fire(res.data.message || "Payment rejected", "", "success");
@@ -127,16 +127,16 @@ const ListOfOflinePayments = ({
 
   // filter payments for display same as original criteria
   const rows =
-    Payment?.filter(
-      (d) =>
-        d?.paymentStatus &&
-        d?.transactionId &&
-        d?.paymentAmount &&
-        d?.BankName &&
-        d?.studentId?.status?.submitedFormDate?.trim() &&
-        d?.studentId?.status?.TrackStatus?.trim() === "4"
-    ) || [];
+    Payment?.filter((d) => {
+      const hasBasicData =
+        d?.paymentStatus && d?.transactionId && d?.paymentAmount && d?.BankName;
 
+      const isStudentApproved = d?.studentId?.status?.TrackStatus === "4";
+
+      const isLead = !!d?.leadStudentId; // 🔥 THIS IS KEY
+
+      return hasBasicData && (isStudentApproved || isLead);
+    }) || [];
   return (
     <>
       {PaymentLoading ? (
@@ -158,6 +158,18 @@ const ListOfOflinePayments = ({
       ) : (
         <tbody className="text-xs">
           {rows.map((data, i) => {
+            const student = data?.studentId || data?.leadStudentId;
+
+            const centerName =
+              student?.center?.name ||
+              student?.whoCreated?.centerName ||
+              student?.whoCreated?.name ||
+              "N/A";
+
+            const studentName =
+              student?.fullName ||
+              `${student?.FirstName || ""} ${student?.LastName || ""}`;
+
             const key = data._id || `${i}`;
             const amount = data?.paymentAmount ?? "0";
             const discount = data?.DiscountAmount ?? "0";
@@ -175,11 +187,9 @@ const ListOfOflinePayments = ({
                 <td className="px-3 py-2">
                   {data?.createdByRole === "Center" ? (
                     <>
-                      <div className="font-semibold">
-                        {data?.studentId?.center?.name}
-                      </div>
+                      <div className="font-semibold">{centerName}</div>
                       <div className="text-xs text-gray-500">
-                        {data?.studentId?.center?.code}
+                        {student?.center?.code || student?.whoCreated?.code}
                       </div>
                     </>
                   ) : (
@@ -189,9 +199,7 @@ const ListOfOflinePayments = ({
 
                 {/* Student */}
                 <td className="px-3 py-2">
-                  <div className="font-semibold">
-                    {data?.studentId?.fullName}
-                  </div>
+                  <div className="font-semibold">{studentName}</div>
                 </td>
 
                 {/* Proof */}
@@ -256,8 +264,8 @@ const ListOfOflinePayments = ({
                       data?.paymentStatus === "approved"
                         ? "bg-green-100 text-green-800"
                         : data?.paymentStatus === "rejected"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-yellow-100 text-yellow-800"
+                          ? "bg-red-100 text-red-800"
+                          : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
                     {data?.paymentStatus}

@@ -43,7 +43,7 @@ const ShowAllLeads = () => {
                     "Activity",
                     "Status",
                     "Created On",
-                    "Show All Leads Date",
+                    "Registration Date",
                     "Name",
                     "Mobile",
                     "Email",

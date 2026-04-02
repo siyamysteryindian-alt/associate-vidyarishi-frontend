@@ -154,6 +154,7 @@ const Showstudents = () => {
                     "Course",
                     "Specialization",
                     "DOB",
+                    "Country",
                     "State",
                     "District",
                     "Student ID",
@@ -187,8 +188,10 @@ const Showstudents = () => {
                           lead.status === "Done"
                             ? "bg-green-100 text-green-700"
                             : lead.status === "Payment-Done"
-                              ? "bg-blue-100 text-blue-700"
-                              : "bg-gray-100 text-gray-700"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : lead.status === "Pending-Approval"
+                                ? "bg-blue-100 text-blue-700"
+                                : "bg-gray-100 text-gray-700"
                         }`}
                       >
                         {lead.status}
@@ -235,6 +238,10 @@ const Showstudents = () => {
                       {lead.DateOfBirth
                         ? new Date(lead.DateOfBirth).toLocaleDateString("en-GB")
                         : "-"}
+                    </td>
+                    {/* Country */}
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {lead.Country || "-"}
                     </td>
 
                     {/* State */}

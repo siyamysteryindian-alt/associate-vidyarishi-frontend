@@ -90,12 +90,12 @@ const ShowAllLeads = () => {
             <div className="relative w-[25rem]">
               <input
                 type="text"
-                // placeholder="Search by Name, Email, Mobile, State or District"
+                // placeholder="Search by Name, Email, Mobile"
                 placeholder="Search by Name, Email, Mobile or Lead owner"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-               className="w-full px-4 py-2 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+                className="w-full px-4 py-2 pr-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
 
               {/* Clear Button */}
               {searchTerm && (

@@ -154,6 +154,7 @@ const Showstudents = () => {
                     "Course",
                     "Specialization",
                     "DOB",
+                    "Country",
                     "State",
                     "District",
                     "Student ID",
@@ -235,6 +236,10 @@ const Showstudents = () => {
                       {lead.DateOfBirth
                         ? new Date(lead.DateOfBirth).toLocaleDateString("en-GB")
                         : "-"}
+                    </td>
+                    {/* Country */}
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {lead.Country || "-"}
                     </td>
 
                     {/* State */}

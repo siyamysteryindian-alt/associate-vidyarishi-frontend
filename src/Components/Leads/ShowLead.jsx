@@ -46,6 +46,7 @@ const ShowLead = () => {
         "Course",
         "Specialization",
         "DOB",
+        "Country",
         "State",
         "District",
         "Student ID",
@@ -65,6 +66,7 @@ const ShowLead = () => {
         lead.Program?.name || "",
         lead.SubCourse?.name || "",
         lead.DateOfBirth || "",
+        lead.Country || "",
         lead.State || "",
         lead.District || "",
         lead.StudentId || "",
@@ -97,9 +99,6 @@ const ShowLead = () => {
       lead.whoCreated?.name?.toLowerCase().includes(search) || // optional
       lead.EmailAddress?.toLowerCase().includes(search) ||
       lead.Phone?.toLowerCase().includes(search)
-      // ||
-      // lead.State?.toLowerCase().includes(search) ||
-      // lead.District?.toLowerCase().includes(search)
     );
   });
 
@@ -179,6 +178,7 @@ const ShowLead = () => {
                   "Course",
                   "Specialization",
                   "DOB",
+                  "Country",
                   "State",
                   "District",
                   "Student ID",
@@ -291,6 +291,10 @@ const ShowLead = () => {
 
                     <td className="px-4 py-3  whitespace-nowrap">
                       {formatDate(lead.DateOfBirth)}
+                    </td>
+
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      {lead.Country || "-"}
                     </td>
 
                     <td className="px-4 py-3 whitespace-nowrap">

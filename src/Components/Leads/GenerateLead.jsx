@@ -42,6 +42,10 @@ const GenerateLead = ({
   const [StudentLoader, setStudentLoader] = useState(false);
   const [ShowStudentId, setShowStudentId] = useState("");
 
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+
   const [form, setForm] = useState({
     leadOwner: "",
     fullName: "",
@@ -51,6 +55,7 @@ const GenerateLead = ({
     course: "",
     subCourse: "",
     dob: "",
+    country: "",
     state: "",
     district: "",
     Center: "",
@@ -74,6 +79,61 @@ const GenerateLead = ({
       GetSpecializationByProgramId(form.course);
     }
   }, [form.course]);
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const res = await axios.get(
+          "https://countriesnow.space/api/v0.1/countries/positions",
+        );
+        setCountries(res.data.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchCountries();
+  }, []);
+
+  const handleCountryChange = async (e) => {
+    const country = e.target.value;
+
+    setForm({ ...form, country, state: "", district: "" });
+    setStates([]);
+    setDistricts([]);
+
+    try {
+      const res = await axios.post(
+        "https://countriesnow.space/api/v0.1/countries/states",
+        { country },
+      );
+
+      setStates(res.data.data.states);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleStateChange = async (e) => {
+    const state = e.target.value;
+
+    setForm({ ...form, state, district: "" });
+    setDistricts([]);
+
+    try {
+      const res = await axios.post(
+        "https://countriesnow.space/api/v0.1/countries/state/cities",
+        {
+          country: form.country,
+          state,
+        },
+      );
+
+      setDistricts(res.data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -105,6 +165,7 @@ const GenerateLead = ({
                   ? "SubCounsellor"
                   : ReduxUser?.role,
           whoCreated: ReduxUser?.id,
+          Country: form.country,
           State: form.state,
           District: form.district,
         },
@@ -313,18 +374,60 @@ const GenerateLead = ({
                 value={form.dob}
                 onChange={handleChange}
               />
-              <FormField
-                label="State"
-                name="state"
-                value={form.state}
-                onChange={handleChange}
-              />
-              <FormField
-                label="District"
-                name="district"
-                value={form.district}
-                onChange={handleChange}
-              />
+              {/* Country */}
+              <div>
+                <label>Country</label>
+                <select
+                  value={form.country}
+                  onChange={handleCountryChange}
+                  className="bg-white border border-gray-300 text-sm text-gray-900 rounded-md w-full p-3"
+                >
+                  <option value="">Select Country</option>
+                  {countries.map((c, i) => (
+                    <option key={i} value={c.name}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* State */}
+              <div>
+                <label>State</label>
+                <select
+                  value={form.state}
+                  onChange={handleStateChange}
+                  disabled={!form.country}
+                  className="bg-white border border-gray-300 text-sm text-gray-900 rounded-md w-full p-3 disabled:bg-gray-100"
+                >
+                  <option value="">Select State</option>
+                  {states.map((s, i) => (
+                    <option key={i} value={s.name}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* District */}
+              <div>
+                <label>District</label>
+                <select
+                  value={form.district}
+                  onChange={(e) =>
+                    setForm({ ...form, district: e.target.value })
+                  }
+                  disabled={!form.state}
+                  className="bg-white border border-gray-300 text-sm text-gray-900 rounded-md w-full p-3 disabled:bg-gray-100"
+                >
+                  <option value="">Select District</option>
+                  {districts.map((d, i) => (
+                    <option key={i} value={d}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div className="text-right pt-8">

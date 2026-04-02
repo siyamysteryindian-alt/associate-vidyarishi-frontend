@@ -185,9 +185,7 @@ const ShowAllLeads = () => {
                       </td>
                       {/* University */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        {lead.university?.shortName ||
-                          lead.university?.name ||
-                          "-"}
+                        {lead.university?.name || "-"}
                       </td>
 
                       {/* Status */}

@@ -188,8 +188,10 @@ const Showstudents = () => {
                           lead.status === "Done"
                             ? "bg-green-100 text-green-700"
                             : lead.status === "Payment-Done"
-                              ? "bg-blue-100 text-blue-700"
-                              : "bg-gray-100 text-gray-700"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : lead.status === "Pending-Approval"
+                                ? "bg-blue-100 text-blue-700"
+                                : "bg-gray-100 text-gray-700"
                         }`}
                       >
                         {lead.status}

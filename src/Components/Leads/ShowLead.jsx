@@ -223,31 +223,16 @@ const ShowLead = () => {
                         className={`px-2 py-1 rounded-md text-xs font-medium ${
                           lead.status === "Done"
                             ? "bg-green-100 text-green-700"
-                            : lead.status === "ShowAllLeads"
-                              ? "bg-blue-100 text-blue-700"
-                              : lead.status === "Admission"
-                                ? "bg-pink-100 text-pink-700"
-                                : "bg-gray-100 text-gray-700"
+                            : lead.status === "Admission"
+                              ? "bg-pink-100 text-pink-700"
+                              : lead.status === "Payment-Done"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : lead.status === "Pending-Approval"
+                                  ? "bg-blue-100 text-blue-700"
+                                  : "bg-gray-100 text-gray-700"
                         }`}
                       >
-                        {/* {lead.status === "Prosp/Reg" ? (
-                          <button
-                            onClick={() => setProspRegOpen(true)}
-                            className="hover:underline"
-                          >
-                            {lead.status}
-                          </button>
-                        ) : (
-                          lead.status
-                        )} */}
-                        {lead.status === "Prosp/Reg" ? (
-                          <button
-                            onClick={() => setProspRegOpen(true)}
-                            className="hover:underline"
-                          >
-                            {lead.status}
-                          </button>
-                        ) : lead.status === "Admission" ? (
+                        {lead.status === "Admission" ? (
                           <Link
                             to={`/${LoggedUser.role}/lead-application-form`}
                             state={{ studentId: lead.StudentId }}

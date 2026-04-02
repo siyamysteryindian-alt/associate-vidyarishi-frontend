@@ -192,20 +192,20 @@ const ShowAllLeads = () => {
 
                       {/* Status */}
                       <td className="px-4 py-3 whitespace-nowrap">
-                        <span className="px-2 py-1 rounded text-xs bg-gray-100">
-                          <span
-                            className={`px-2 py-1 rounded-md text-xs font-medium ${
-                              lead.status === "Done"
-                                ? "bg-green-100 text-green-700"
-                                : lead.status === "Payment-Done"
-                                  ? "bg-blue-100 text-blue-700"
-                                  : lead.status === "Admission"
-                                    ? "bg-pink-100 text-pink-700"
+                        <span
+                          className={`px-2 py-1 rounded-md text-xs font-medium ${
+                            lead.status === "Done"
+                              ? "bg-green-100 text-green-700"
+                              : lead.status === "Payment-Done"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : lead.status === "Admission"
+                                  ? "bg-pink-100 text-pink-700"
+                                  : lead.status === "Pending-Approval"
+                                    ? "bg-blue-100 text-blue-700"
                                     : "bg-gray-100 text-gray-700"
-                            }`}
-                          >
-                            {lead.status}
-                          </span>
+                          }`}
+                        >
+                          {lead.status}
                         </span>
                       </td>
 

@@ -6,12 +6,14 @@ import ProspRegModal from "../Leads/ProspReg/ProspRegModal";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import { useSelector } from "react-redux";
 
 const Showstudents = () => {
   const [ActivityOpen, setActivityOpen] = useState(false);
   const [ProspRegOpen, setProspRegOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [students, setStudents] = useState([]);
+  const LoggedUser = useSelector((state) => state.user);
 
   useEffect(() => {
     fetchStudents();
@@ -122,8 +124,8 @@ const Showstudents = () => {
 
             {/* ➕ ADD LEAD */}
             <NavLink
-              to="/admin/lead-generate"
-              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+              to={`/${LoggedUser.role}/lead-generate`}
+              className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 shadow-sm transition"
             >
               + Add Lead
             </NavLink>

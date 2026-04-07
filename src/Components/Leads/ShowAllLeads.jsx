@@ -4,6 +4,7 @@ import ActivityModal from "./Activity/ShowActivity";
 import axios from "axios";
 import { saveAs } from "file-saver";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ShowAllLeads = () => {
   const [activityOpen, setActivityOpen] = useState(false);
@@ -13,6 +14,8 @@ const ShowAllLeads = () => {
   useEffect(() => {
     fetchLeads();
   }, []);
+
+  const LoggedUser = useSelector((state) => state.user);
 
   const fetchLeads = async () => {
     try {
@@ -109,9 +112,10 @@ const ShowAllLeads = () => {
             </div>
 
             {/* ➕ ADD LEAD */}
+
             <NavLink
-              to="/admin/lead-generate"
-              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+              to={`/${LoggedUser.role}/lead-generate`}
+              className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 shadow-sm transition"
             >
               + Add Lead
             </NavLink>

@@ -61,6 +61,39 @@ const StudentApplicationForm = ({ studentId, studentData }) => {
   }, [ReduxSelectedUniversity?.id]);
 
   useEffect(() => {
+    if (AdmissionsessionListData?.length && !form.admissionSession) {
+      const filtered = AdmissionsessionListData.filter(
+        (a) => a?.university === ReduxSelectedUniversity?.id && a?.isAvailable,
+      );
+
+      if (filtered.length > 0) {
+        setForm((prev) => ({
+          ...prev,
+          admissionSession: filtered[0]._id, // ✅ first available session
+        }));
+      }
+    }
+  }, [AdmissionsessionListData, ReduxSelectedUniversity]);
+
+  useEffect(() => {
+    if (AdmissionType?.length && !form.admissionType) {
+      setForm((prev) => ({
+        ...prev,
+        admissionType: AdmissionType[0]._id, // ✅ default first type
+      }));
+    }
+  }, [AdmissionType]);
+
+  useEffect(() => {
+    if (!form.semester) {
+      setForm((prev) => ({
+        ...prev,
+        semester: "1", // ✅ default semester
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
     if (form.course) {
       GetSpecializationByProgramId(form.course);
     }

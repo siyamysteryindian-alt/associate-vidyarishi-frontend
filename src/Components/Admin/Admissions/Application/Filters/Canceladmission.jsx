@@ -669,37 +669,35 @@ const Canceladmission = ({
                 )}
 
                 <td className="text-center">
-                  {ReduxUser.role === "center" && (
+                  {StudentData?.Courier && (
                     <div className="flex justify-center gap-2">
-                      {StudentData?.Courier && (
-                        <>
+                      {/* ✅ VIEW → FOR ALL */}
+                      <button
+                        className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                        onClick={() => HandleViewCourier(StudentData?.Courier)}
+                      >
+                        View
+                      </button>
+
+                      {/* 🔒 MARK RECEIVED → ONLY CENTER */}
+                      {ReduxUser.role === "center" &&
+                        !StudentData?.Courier?.Received && (
                           <button
-                            className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
-                            onClick={() =>
-                              HandleViewCourier(StudentData?.Courier)
-                            }
+                            className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                            onClick={() => {
+                              setSelectedCourierId(StudentData?.Courier?._id);
+                              setConfirmModal(true);
+                            }}
                           >
-                            View
+                            Mark Received
                           </button>
+                        )}
 
-                          {!StudentData?.Courier?.Received && (
-                            <button
-                              className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
-                              onClick={() => {
-                                setSelectedCourierId(StudentData?.Courier?._id);
-                                setConfirmModal(true);
-                              }}
-                            >
-                              Mark Received
-                            </button>
-                          )}
-
-                          {StudentData?.Courier?.Received && (
-                            <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
-                              Received
-                            </span>
-                          )}
-                        </>
+                      {/* ✅ SHOW STATUS TO ALL */}
+                      {StudentData?.Courier?.Received && (
+                        <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                          Received
+                        </span>
                       )}
                     </div>
                   )}

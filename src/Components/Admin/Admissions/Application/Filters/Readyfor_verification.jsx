@@ -741,10 +741,10 @@ const Readyfor_verification = ({
                   </div>
                 </td>
 
-                {/* courier name */}
+                {/* Courier Name */}
                 <td className="px-4 py-2 align-center">
                   <div
-                    className={`w-40 text-xs ${
+                    className={`w-40 text-sm ${
                       StudentData?.Courier && "font-bold"
                     }`}
                   >
@@ -754,10 +754,10 @@ const Readyfor_verification = ({
                   </div>
                 </td>
 
-                {/* courier date */}
+                {/* Courier Date */}
                 <td className="px-4 py-2 align-center">
                   <div
-                    className={`w-40 text-xs ${
+                    className={`w-40 text-sm ${
                       StudentData?.Courier && "font-bold"
                     }`}
                   >
@@ -767,10 +767,10 @@ const Readyfor_verification = ({
                   </div>
                 </td>
 
-                {/* drop location */}
+                {/* Courier Drop Location */}
                 <td className="px-4 py-2 align-center">
                   <div
-                    className={`w-40 text-xs ${
+                    className={`w-40 text-sm ${
                       StudentData?.Courier && "font-bold"
                     }`}
                   >
@@ -779,8 +779,9 @@ const Readyfor_verification = ({
                       : "N/A"}
                   </div>
                 </td>
-                <td className="text-center">
-                  {ReduxUser.role === "center" && (
+
+                {ReduxUser.role === "center" && (
+                  <td className="text-center">
                     <div className="flex justify-center gap-2">
                       {StudentData?.Courier && (
                         <>
@@ -813,19 +814,54 @@ const Readyfor_verification = ({
                         </>
                       )}
                     </div>
+                  </td>
+                )}
+
+                <td className="text-center">
+                  {StudentData?.Courier && (
+                    <div className="flex justify-center gap-2">
+                      {/* ✅ VIEW → FOR ALL */}
+                      <button
+                        className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                        onClick={() => HandleViewCourier(StudentData?.Courier)}
+                      >
+                        View
+                      </button>
+
+                      {/* 🔒 MARK RECEIVED → ONLY CENTER */}
+                      {ReduxUser.role === "center" &&
+                        !StudentData?.Courier?.Received && (
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                            onClick={() => {
+                              setSelectedCourierId(StudentData?.Courier?._id);
+                              setConfirmModal(true);
+                            }}
+                          >
+                            Mark Received
+                          </button>
+                        )}
+
+                      {/* ✅ SHOW STATUS TO ALL */}
+                      {StudentData?.Courier?.Received && (
+                        <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                          Received
+                        </span>
+                      )}
+                    </div>
                   )}
                 </td>
 
-                {/* Courier status for Admin */}
+                {/* Courier Status for Admin */}
                 {ReduxUser?.role === "Admin" && (
                   <td className="px-4 w-48 py-2 align-center">
-                    <div className="flex justify-center">
+                    <div className="flex justify-center items-center ml-10">
                       {StudentData?.Courier ? (
-                        <div className="px-4 py-1.5 bg-orange-400 rounded-lg font-bold text-white text-xs w-36 text-center">
+                        <div className="-ml-14 px-4 py-1.5 bg-orange-400 rounded-lg font-bold text-white text-sm w-36 text-center">
                           Assigned Courier
                         </div>
                       ) : (
-                        <div className="px-2.5 py-1.5 bg-yellow-400 rounded-lg font-bold text-black text-xs w-36 text-center">
+                        <div className="-ml-14 px-2.5 py-1.5 bg-yellow-400 rounded-lg font-bold text-black text-xs w-36 text-center">
                           Not Assigned Courier
                         </div>
                       )}

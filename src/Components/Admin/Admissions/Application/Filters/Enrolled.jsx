@@ -95,14 +95,14 @@ const Enrolled = ({
     if (StatusDetails?.MarkAsByCenter && CompleteStudentData?._id) {
       UpdateProcessedByCenter(
         StatusDetails.MarkAsByCenter,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
     }
 
     if (StatusDetails?.MarkAsByUniversity && CompleteStudentData?._id) {
       UpdateProcessedByUniversity(
         StatusDetails.MarkAsByUniversity,
-        CompleteStudentData._id
+        CompleteStudentData._id,
       );
     }
 
@@ -145,7 +145,7 @@ const Enrolled = ({
             },
             {
               withCredentials: true,
-            }
+            },
           );
 
           if (response?.data?.success) {
@@ -154,7 +154,7 @@ const Enrolled = ({
                 if (result?.isConfirmed) {
                   setRefreshApplications(true);
                 }
-              }
+              },
             );
           } else {
             toast.error(response?.data?.message || "Failed to Process.");
@@ -162,7 +162,7 @@ const Enrolled = ({
         } catch (error) {
           toast.error(
             error.response?.data?.message ||
-              "An error occurred. Please try again."
+              "An error occurred. Please try again.",
           );
         }
       } else {
@@ -200,7 +200,7 @@ const Enrolled = ({
             },
             {
               withCredentials: true,
-            }
+            },
           );
 
           if (response?.data?.success) {
@@ -209,19 +209,19 @@ const Enrolled = ({
                 if (result?.isConfirmed) {
                   setRefreshApplications(true);
                 }
-              }
+              },
             );
           } else {
             Swal.fire(
               `${response?.data?.message || "Failed to Process University!"}`,
               "",
-              "success"
+              "success",
             );
           }
         } catch (error) {
           toast.error(
             error.response?.data?.message ||
-              "An error occurred. Please try again."
+              "An error occurred. Please try again.",
           );
         }
       } else {
@@ -256,7 +256,7 @@ const Enrolled = ({
             },
             {
               withCredentials: true,
-            }
+            },
           );
 
           if (response?.data?.success) {
@@ -265,19 +265,19 @@ const Enrolled = ({
                 if (result?.isConfirmed) {
                   setRefreshApplications(true);
                 }
-              }
+              },
             );
           } else {
             Swal.fire(
               `${response?.data?.message || "Failed to Process University!"}`,
               "",
-              "success"
+              "success",
             );
           }
         } catch (error) {
           toast.error(
             error.response?.data?.message ||
-              "An error occurred. Please try again."
+              "An error occurred. Please try again.",
           );
         }
       } else {
@@ -380,7 +380,7 @@ const Enrolled = ({
         (studentDoc) =>
           studentDoc.isPendency === false &&
           studentDoc.isApproved === true &&
-          studentDoc.isApprovedDate !== ""
+          studentDoc.isApprovedDate !== "",
       ).length > 0;
 
     const status = data?.status || {};
@@ -401,7 +401,7 @@ const Enrolled = ({
   const hasAnyInUniversity = AllStudentListData?.some(
     (data) =>
       !data?.isDeleted &&
-      data?.university?._id === UniversityGetDataFromRedux?.id
+      data?.university?._id === UniversityGetDataFromRedux?.id,
   );
 
   return (
@@ -529,7 +529,7 @@ const Enrolled = ({
                             <>
                               Completed (
                               {ExtractDateFromDb(
-                                StudentData?.status?.submitedFormDate
+                                StudentData?.status?.submitedFormDate,
                               )}
                               )
                             </>
@@ -580,7 +580,7 @@ const Enrolled = ({
                           {" "}
                           (
                           {ExtractDateFromDb(
-                            StudentData?.status?.processedbyCenteron
+                            StudentData?.status?.processedbyCenteron,
                           )}
                           )
                         </span>
@@ -647,7 +647,7 @@ const Enrolled = ({
                             {" "}
                             Verified On (
                             {ExtractDateFromDb(
-                              StudentData?.documents?.isApprovedDate
+                              StudentData?.documents?.isApprovedDate,
                             )}
                             )
                           </span>
@@ -666,7 +666,7 @@ const Enrolled = ({
                           {" "}
                           (
                           {ExtractDateFromDb(
-                            StudentData?.status?.processedtoUniversityon
+                            StudentData?.status?.processedtoUniversityon,
                           )}
                           )
                         </span>
@@ -695,7 +695,7 @@ const Enrolled = ({
                         <span className="text-rose-600 font-bold">
                           {" "}
                           {ExtractDateFromDb(
-                            StudentData?.status?.admissionCancelDate
+                            StudentData?.status?.admissionCancelDate,
                           )}
                         </span>
                       </div>
@@ -879,10 +879,23 @@ const Enrolled = ({
                   </div>
                 </td>
 
-                {/* courier date */}
+                {/* Courier Name */}
                 <td className="px-4 py-2 align-center">
                   <div
-                    className={`w-40 text-xs ${
+                    className={`w-40 text-sm ${
+                      StudentData?.Courier && "font-bold"
+                    }`}
+                  >
+                    {StudentData?.Courier
+                      ? StudentData?.Courier?.CourierName?.CourierName
+                      : "N/A"}
+                  </div>
+                </td>
+
+                {/* Courier Date */}
+                <td className="px-4 py-2 align-center">
+                  <div
+                    className={`w-40 text-sm ${
                       StudentData?.Courier && "font-bold"
                     }`}
                   >
@@ -892,38 +905,103 @@ const Enrolled = ({
                   </div>
                 </td>
 
-                {/* courier drop location */}
+                {/* Courier Drop Location */}
                 <td className="px-4 py-2 align-center">
                   <div
-                    className={`w-40 text-xs ${
+                    className={`w-40 text-sm ${
                       StudentData?.Courier && "font-bold"
                     }`}
                   >
                     {StudentData?.Courier
-                      ? StudentData?.Courier?.DropLocation
+                      ? StudentData?.Courier?.DocketNo
                       : "N/A"}
                   </div>
                 </td>
 
-                {/* courier status / assign */}
+                {ReduxUser.role === "center" && (
+                  <td className="text-center">
+                    <div className="flex justify-center gap-2">
+                      {StudentData?.Courier && (
+                        <>
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                            onClick={() =>
+                              HandleViewCourier(StudentData?.Courier)
+                            }
+                          >
+                            View
+                          </button>
+
+                          {!StudentData?.Courier?.Received && (
+                            <button
+                              className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                              onClick={() => {
+                                setSelectedCourierId(StudentData?.Courier?._id);
+                                setConfirmModal(true);
+                              }}
+                            >
+                              Mark Received
+                            </button>
+                          )}
+
+                          {StudentData?.Courier?.Received && (
+                            <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                              Received
+                            </span>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </td>
+                )}
+
+                <td className="text-center">
+                  {StudentData?.Courier && (
+                    <div className="flex justify-center gap-2">
+                      {/* ✅ VIEW → FOR ALL */}
+                      <button
+                        className="px-3 py-1 text-[11px] rounded bg-blue-500 text-white"
+                        onClick={() => HandleViewCourier(StudentData?.Courier)}
+                      >
+                        View
+                      </button>
+
+                      {/* 🔒 MARK RECEIVED → ONLY CENTER */}
+                      {ReduxUser.role === "center" &&
+                        !StudentData?.Courier?.Received && (
+                          <button
+                            className="px-3 py-1 text-[11px] rounded bg-green-500 text-white"
+                            onClick={() => {
+                              setSelectedCourierId(StudentData?.Courier?._id);
+                              setConfirmModal(true);
+                            }}
+                          >
+                            Mark Received
+                          </button>
+                        )}
+
+                      {/* ✅ SHOW STATUS TO ALL */}
+                      {StudentData?.Courier?.Received && (
+                        <span className="px-3 py-1 text-[11px] rounded bg-green-100 text-green-700">
+                          Received
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </td>
+
+                {/* Courier Status for Admin */}
                 {ReduxUser?.role === "Admin" && (
                   <td className="px-4 w-48 py-2 align-center">
-                    <div className="flex justify-center">
+                    <div className="flex justify-center items-center ml-10">
                       {StudentData?.Courier ? (
-                        <div className="-ml-2 px-4 py-1.5 bg-orange-400 rounded-lg font-bold text-white text-xs w-36 text-center">
+                        <div className="-ml-14 px-4 py-1.5 bg-orange-400 rounded-lg font-bold text-white text-sm w-36 text-center">
                           Assigned Courier
                         </div>
                       ) : (
-                        <button
-                          onClick={() => HandleCourierOpen(StudentData)}
-                          title="Assign Courier"
-                          className="text-blue-600 hover:text-blue-700"
-                        >
-                          <div className="-ml-2 flex justify-center gap-2 px-2.5 py-2 bg-blue-400 rounded-lg font-bold text-white text-xs w-36">
-                            Assign Courier
-                            <RiEditLine />
-                          </div>
-                        </button>
+                        <div className="-ml-14 px-2.5 py-1.5 bg-yellow-400 rounded-lg font-bold text-black text-xs w-36 text-center">
+                          Not Assigned Courier
+                        </div>
                       )}
                     </div>
                   </td>

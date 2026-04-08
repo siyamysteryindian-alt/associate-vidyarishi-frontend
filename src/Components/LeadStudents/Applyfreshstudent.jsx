@@ -71,7 +71,9 @@ const Applyfreshstudent = () => {
         alert("User not found");
       }
     } catch (error) {
-      alert("User not found");
+      const msg = error.response?.data?.message || "User not found";
+
+      alert(msg);
     } finally {
       setIsLoading(false);
     }

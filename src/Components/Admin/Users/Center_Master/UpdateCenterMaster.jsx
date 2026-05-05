@@ -13,6 +13,7 @@ const UpdateCenterMaster = ({
     UserType: "",
     Name: "",
     ShortName: "",
+    MouId: "",
     Email: "",
     ContactPersonName: "",
     Contact: "",
@@ -37,6 +38,7 @@ const UpdateCenterMaster = ({
       UserType: EditCenterMasterUpdate?.userType || "",
       Name: EditCenterMasterUpdate?.name || "",
       ShortName: EditCenterMasterUpdate?.shortName || "",
+      MouId: EditCenterMasterUpdate?.mouId || "",
       Email: EditCenterMasterUpdate?.email || "",
       ContactPersonName: EditCenterMasterUpdate?.contactPersonName || "",
       Contact: EditCenterMasterUpdate?.contact || "",
@@ -132,6 +134,7 @@ const UpdateCenterMaster = ({
           photo: CenterMasterData?.Photo,
           userType: CenterMasterData?.UserType,
           shortName: CenterMasterData?.ShortName,
+          mouId: CenterMasterData?.MouId,
           contactPersonName: CenterMasterData?.ContactPersonName,
           alternateContact: CenterMasterData?.AlternateContact,
           pincode: CenterMasterData?.Pincode,
@@ -144,7 +147,7 @@ const UpdateCenterMaster = ({
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (Response?.data?.success) {
@@ -156,7 +159,8 @@ const UpdateCenterMaster = ({
       }
     } catch (error) {
       toast.error(
-        error?.response?.data?.message || "An error occurred. Please try again."
+        error?.response?.data?.message ||
+          "An error occurred. Please try again.",
       );
     }
   };
@@ -264,6 +268,17 @@ const UpdateCenterMaster = ({
                 }`}
                 placeholder="Ex: SB"
                 required
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium mb-1">MOU ID</label>
+              <input
+                name="MouId"
+                value={CenterMasterData.MouId}
+                onChange={HandleInputData}
+                className="w-full text-sm rounded border px-3 py-2"
+                placeholder="Enter MOU ID"
               />
             </div>
 

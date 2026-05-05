@@ -13,6 +13,7 @@ const CreateCenterMaster = ({
     UserType: "",
     Name: "",
     ShortName: "",
+    MouId: "",
     Email: "",
     ContactPersonName: "",
     Contact: "",
@@ -84,6 +85,7 @@ const CreateCenterMaster = ({
           userType: CenterMasterData?.UserType,
           name: CenterMasterData?.Name,
           shortName: CenterMasterData?.ShortName,
+          mouId: CenterMasterData?.MouId,
           email: CenterMasterData?.Email,
           contact: CenterMasterData?.Contact,
           contactPersonName: CenterMasterData?.ContactPersonName,
@@ -99,7 +101,7 @@ const CreateCenterMaster = ({
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       if (Response?.data?.success) {
@@ -111,7 +113,8 @@ const CreateCenterMaster = ({
       }
     } catch (error) {
       toast.error(
-        error?.response?.data?.message || "An error occurred. Please try again."
+        error?.response?.data?.message ||
+          "An error occurred. Please try again.",
       );
     }
   };
@@ -241,6 +244,19 @@ const CreateCenterMaster = ({
                       ? "outline-2 outline-red-500"
                       : "outline-2 outline-green-500"
                   }`}
+                />
+              </div>
+
+              {/* MOU ID */}
+              <div>
+                <label className="block text-xs font-medium mb-1">MOU ID</label>
+                <input
+                  name="MouId"
+                  id="MouId"
+                  value={CenterMasterData.MouId}
+                  onChange={HandleInputData}
+                  placeholder="Enter MOU ID"
+                  className="w-full text-xs rounded border px-3 py-2 focus:outline-none"
                 />
               </div>
 

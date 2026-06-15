@@ -217,7 +217,7 @@ const GenerateLead = ({
             style={{ color: "var(--brand-ink)" }}
           >
             <h2 className="text-base font-bold text-gray-800">
-              Generate New Lead In{" "}
+              Generate New Lead In
               <span className="text-slate-800 text-base capitalize font-extrabold">
                 ( {ReduxSelectedUniversity.name} )
                 {ReduxSelectedUniversity.shortName}

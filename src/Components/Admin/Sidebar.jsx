@@ -570,6 +570,11 @@ const Sidebar = () => {
     }
   }, [ReduxUser?.role]);
 
+  const displayName =
+    ReduxUser?.role === "center"
+      ? LoggedUserData?.shortName || LoggedUser?.name
+      : LoggedUser?.name;
+
   const { id } = useParams();
   const UpdateStudentUrl = Location.pathname.slice(0, 22) + id;
   const UpdateStudentUrlcounsellor = Location.pathname.slice(0, 27) + id;
@@ -1042,7 +1047,8 @@ const Sidebar = () => {
                         )}
                       </div>
                       <div className="flex flex-col">
-                        <span className="truncate">{LoggedUser?.name}</span>
+                        <div className="truncate">{displayName}</div>
+                        {/* <span className="truncate">{LoggedUser?.name}</span> */}
                         <span className="ml-1">({LoggedUser?.role})</span>
                       </div>
                     </div>
